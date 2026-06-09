@@ -4,7 +4,7 @@
   "installCommand": "NPM_CONFIG_REGISTRY=https://registry.npmjs.org corepack pnpm install --frozen-lockfile --registry=https://registry.npmjs.org",
   "buildCommand": "corepack pnpm build",
   "devCommand": "corepack pnpm dev",
-  "outputDirectory": "apps/frontend-schnittwerk/.next",
+  "outputDirectory": ".next",
   "build": {
     "env": {
       "NEXT_PUBLIC_MOCK_MODE": "true",
