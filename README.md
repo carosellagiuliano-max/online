@@ -17,6 +17,21 @@ pnpm install
 pnpm dev
 ```
 
+## Vercel Deployment
+
+Wichtig: In den Vercel-Projekteinstellungen (Settings -> General) muss das
+**Root Directory** auf `apps/frontend-schnittwerk` gesetzt sein. Die Option
+"Include source files outside of the Root Directory" muss aktiviert bleiben
+(Standard), damit der pnpm-Workspace (`packages/backend`) mitgebaut wird.
+
+Die komplette Build-Konfiguration inkl. Demo-Umgebungsvariablen (Mock Mode)
+liegt in `apps/frontend-schnittwerk/vercel.json` und wird von Vercel
+automatisch gelesen. Es muessen keine Environment-Variablen im Dashboard
+gesetzt werden.
+
+Hinweis: Die Cron-Routen unter `/api/cron/*` laufen auf Vercel nur, wenn sie
+als Crons konfiguriert werden. Fuer die Mock-Demo ist das nicht noetig.
+
 ## Replit Preview & Deployment
 
 Dieses Demo-Repo ist fuer Replit vorbereitet. Nach dem GitHub-Import kann Replit
