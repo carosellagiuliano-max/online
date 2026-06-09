@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
+import { isMockMode } from '@/lib/mock/mock-auth';
 
 // ============================================
 // TYPES
@@ -111,6 +112,27 @@ async function checkSupabaseAuth(): Promise<HealthCheck> {
 
 export async function GET() {
   try {
+    if (isMockMode()) {
+      const response: HealthResponse = {
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        version: process.env.npm_package_version || '1.0.0',
+        uptime_seconds: getUptimeSeconds(),
+        checks: {
+          database: {
+            status: 'up',
+            latency_ms: 0,
+          },
+          supabase_auth: {
+            status: 'up',
+            latency_ms: 0,
+          },
+        },
+      };
+
+      return NextResponse.json(response, { status: 200 });
+    }
+
     // Run health checks in parallel
     const [database, supabaseAuth] = await Promise.all([
       checkDatabase(),

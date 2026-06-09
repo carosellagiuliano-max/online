@@ -5,24 +5,24 @@
   "packageManager": "pnpm@10.28.0",
   "engines": {
     "node": ">=20 <23",
-    "pnpm": "10.28.0"
+    "pnpm": ">=10 <11"
   },
   "scripts": {
-    "dev": "pnpm --filter frontend-schnittwerk dev",
+    "dev": "corepack pnpm --filter frontend-schnittwerk dev",
     "dev:replit": "node scripts/replit-next.mjs dev",
-    "build": "pnpm --filter frontend-schnittwerk build",
+    "build": "corepack pnpm --filter frontend-schnittwerk build",
     "build:replit": "NPM_CONFIG_REGISTRY=https://registry.npmjs.org/ npm_config_registry=https://registry.npmjs.org/ corepack pnpm install --frozen-lockfile --registry=https://registry.npmjs.org/ && corepack pnpm build",
-    "start": "pnpm --filter frontend-schnittwerk start",
+    "start": "corepack pnpm --filter frontend-schnittwerk start",
     "start:replit": "node scripts/replit-next.mjs start",
-    "dev:all": "pnpm -r dev",
-    "build:all": "pnpm -r build",
-    "lint": "pnpm -r lint",
-    "lint:fix": "pnpm -r lint:fix",
-    "typecheck": "pnpm -r typecheck",
-    "test": "pnpm --filter @beautifypro/backend test",
-    "test:run": "pnpm --filter @beautifypro/backend test:run",
-    "test:coverage": "pnpm --filter @beautifypro/backend test:coverage",
-    "test:e2e": "pnpm --filter frontend-schnittwerk test:e2e",
+    "dev:all": "corepack pnpm -r dev",
+    "build:all": "corepack pnpm -r build",
+    "lint": "corepack pnpm -r lint",
+    "lint:fix": "corepack pnpm -r lint:fix",
+    "typecheck": "corepack pnpm -r typecheck",
+    "test": "corepack pnpm --filter @beautifypro/backend test",
+    "test:run": "corepack pnpm --filter @beautifypro/backend test:run",
+    "test:coverage": "corepack pnpm --filter @beautifypro/backend test:coverage",
+    "test:e2e": "corepack pnpm --filter frontend-schnittwerk test:e2e",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules"
   },
   "devDependencies": {

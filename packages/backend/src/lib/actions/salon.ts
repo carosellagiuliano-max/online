@@ -7,6 +7,7 @@ import {
   MOCK_SALON,
   MOCK_SERVICE_CATEGORIES,
   MOCK_SERVICES,
+  MOCK_SOCIAL_LINKS,
 } from '@/lib/mock/mock-data';
 import { unstable_cache, revalidateTag, revalidatePath } from 'next/cache';
 
@@ -757,8 +758,25 @@ export type SocialLink = {
   sortOrder: number;
 };
 
+function toMockSocialLinks(enabledOnly = false): SocialLink[] {
+  return MOCK_SOCIAL_LINKS
+    .filter((link) => !enabledOnly || link.is_enabled)
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((link) => ({
+      id: link.id,
+      platform: link.platform,
+      url: link.url,
+      isEnabled: link.is_enabled,
+      sortOrder: link.sort_order,
+    }));
+}
+
 export const getSocialLinks = unstable_cache(
   async (salonId: string = DEFAULT_SALON_ID): Promise<SocialLink[]> => {
+    if (isMockMode()) {
+      return toMockSocialLinks();
+    }
+
     const supabase = createServerClient() as any;
 
     if (!supabase) {
@@ -791,6 +809,10 @@ export const getSocialLinks = unstable_cache(
 // Get only enabled social links (for public pages)
 export const getEnabledSocialLinks = unstable_cache(
   async (salonId: string = DEFAULT_SALON_ID): Promise<SocialLink[]> => {
+    if (isMockMode()) {
+      return toMockSocialLinks(true);
+    }
+
     const supabase = createServerClient() as any;
 
     if (!supabase) {
@@ -842,6 +864,10 @@ export async function updateSocialLinks(
   links: UpdateSocialLinkInput[],
   salonId: string = DEFAULT_SALON_ID
 ): Promise<UpdateSocialLinksResult> {
+  if (isMockMode()) {
+    return { success: true };
+  }
+
   const supabase = createServerClient() as any;
 
   if (!supabase) {

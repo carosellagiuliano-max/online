@@ -339,6 +339,61 @@ export const MOCK_ORDERS = [
 ];
 
 // ============================================
+// MOCK FEEDBACK & SOCIAL LINKS
+// ============================================
+
+export const MOCK_FEEDBACK = [
+  {
+    id: 'feedback-001',
+    customer_name: 'Mia Keller',
+    rating: 5,
+    comment: 'Sehr professionelle Beratung und ein wunderschönes Ergebnis. Ich komme gerne wieder.',
+    status: 'approved',
+    submitted_at: '2026-05-22T12:30:00Z',
+  },
+  {
+    id: 'feedback-002',
+    customer_name: 'Lina Meier',
+    rating: 5,
+    comment: 'Die Online-Buchung war einfach und der Termin im Salon perfekt vorbereitet.',
+    status: 'approved',
+    submitted_at: '2026-05-18T16:10:00Z',
+  },
+  {
+    id: 'feedback-003',
+    customer_name: 'Noah Baumann',
+    rating: 4,
+    comment: 'Sehr freundliches Team, sauberer Ablauf und transparente Preise.',
+    status: 'approved',
+    submitted_at: '2026-05-11T09:45:00Z',
+  },
+];
+
+export const MOCK_SOCIAL_LINKS = [
+  {
+    id: 'social-001',
+    platform: 'instagram',
+    url: 'https://www.instagram.com/beautifypro.demo',
+    is_enabled: true,
+    sort_order: 1,
+  },
+  {
+    id: 'social-002',
+    platform: 'facebook',
+    url: 'https://www.facebook.com/beautifypro.demo',
+    is_enabled: true,
+    sort_order: 2,
+  },
+  {
+    id: 'social-003',
+    platform: 'tiktok',
+    url: 'https://www.tiktok.com/@beautifypro.demo',
+    is_enabled: false,
+    sort_order: 3,
+  },
+];
+
+// ============================================
 // MOCK ANALYTICS
 // ============================================
 

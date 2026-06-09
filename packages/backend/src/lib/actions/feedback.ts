@@ -7,6 +7,8 @@
 
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logging/logger';
+import { isMockMode } from '@/lib/mock/mock-auth';
+import { MOCK_FEEDBACK } from '@/lib/mock/mock-data';
 
 // Default salon ID (single-tenant setup)
 const DEFAULT_SALON_ID = '550e8400-e29b-41d4-a716-446655440001';
@@ -65,6 +67,19 @@ export interface UpdateFeedbackStatusResult {
  * Returns the latest reviews with min. 4 stars, sorted by date (newest first)
  */
 export async function getApprovedFeedback(limit: number = 6): Promise<PublicFeedback[]> {
+  if (isMockMode()) {
+    return MOCK_FEEDBACK
+      .filter((item) => item.status === 'approved' && item.rating >= 4)
+      .slice(0, limit)
+      .map((item) => ({
+        id: item.id,
+        name: item.customer_name || 'Anonym',
+        rating: item.rating,
+        comment: item.comment,
+        submittedAt: new Date(item.submitted_at),
+      }));
+  }
+
   const supabase = createServiceRoleClient() as any;
   if (!supabase) return [];
 
@@ -100,6 +115,19 @@ export async function getFeedbackStats(): Promise<{
   averageRating: number;
   totalReviews: number;
 }> {
+  if (isMockMode()) {
+    const approved = MOCK_FEEDBACK.filter((item) => item.status === 'approved');
+    if (approved.length === 0) {
+      return { averageRating: 0, totalReviews: 0 };
+    }
+
+    const sum = approved.reduce((acc, item) => acc + item.rating, 0);
+    return {
+      averageRating: Math.round((sum / approved.length) * 10) / 10,
+      totalReviews: approved.length,
+    };
+  }
+
   const supabase = createServiceRoleClient() as any;
   if (!supabase) return { averageRating: 0, totalReviews: 0 };
 
@@ -146,6 +174,11 @@ export async function submitPublicFeedback(
     return { success: false, error: 'Bitte geben Sie eine Bewertung von 1-5 ab.' };
   }
 
+  if (isMockMode()) {
+    logger.info('Mock feedback submitted', { name: input.name, rating: input.rating });
+    return { success: true };
+  }
+
   const supabase = createServiceRoleClient() as any;
   if (!supabase) {
     return { success: false, error: 'Datenbankverbindung fehlgeschlagen.' };
@@ -190,6 +223,27 @@ export async function getAdminFeedback(options?: {
   limit?: number;
   offset?: number;
 }): Promise<{ feedback: AdminFeedback[]; total: number }> {
+  if (isMockMode()) {
+    const offset = options?.offset || 0;
+    const limit = options?.limit || 20;
+    const rows = MOCK_FEEDBACK
+      .filter((item) => !options?.status || item.status === options.status)
+      .map((item) => ({
+        id: item.id,
+        name: item.customer_name || 'Anonym',
+        email: null,
+        rating: item.rating,
+        comment: item.comment,
+        status: item.status as FeedbackStatus,
+        response: null,
+        respondedAt: null,
+        submittedAt: new Date(item.submitted_at),
+        ipAddress: null,
+      }));
+
+    return { feedback: rows.slice(offset, offset + limit), total: rows.length };
+  }
+
   const supabase = createServiceRoleClient() as any;
   if (!supabase) return { feedback: [], total: 0 };
 
@@ -240,6 +294,10 @@ export async function getAdminFeedback(options?: {
  * Get pending feedback count for admin dashboard
  */
 export async function getPendingFeedbackCount(): Promise<number> {
+  if (isMockMode()) {
+    return MOCK_FEEDBACK.filter((item) => item.status === 'pending').length;
+  }
+
   const supabase = createServiceRoleClient() as any;
   if (!supabase) return 0;
 
@@ -266,6 +324,11 @@ export async function updateFeedbackStatus(
   feedbackId: string,
   status: FeedbackStatus
 ): Promise<UpdateFeedbackStatusResult> {
+  if (isMockMode()) {
+    logger.info('Mock feedback status update', { feedbackId, status });
+    return { success: true };
+  }
+
   const supabase = createServiceRoleClient() as any;
   if (!supabase) {
     return { success: false, error: 'Datenbankverbindung fehlgeschlagen.' };

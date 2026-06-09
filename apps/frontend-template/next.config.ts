@@ -3,10 +3,11 @@ import path from 'path';
 
 // Domain for image optimization (from env var)
 const imageDomain = process.env.NEXT_PUBLIC_DOMAIN;
+const isStandaloneBuild = process.env.BEAUTIFYPRO_STANDALONE === 'true';
 
 const nextConfig: NextConfig = {
-  // Enable standalone output for Docker
-  output: 'standalone',
+  // Enable standalone output only for Docker builds. Replit uses next start.
+  ...(isStandaloneBuild ? { output: 'standalone' as const } : {}),
 
   // Transpile the backend package
   transpilePackages: ['@beautifypro/backend'],
@@ -25,12 +26,12 @@ const nextConfig: NextConfig = {
 
   // Turbopack configuration for path aliases
   turbopack: {
-    root: '../..',
+    root: path.resolve(__dirname, '../..'),
     resolveAlias: {
-      '@/components': '../../packages/backend/src/components',
-      '@/lib': '../../packages/backend/src/lib',
-      '@/contexts': '../../packages/backend/src/contexts',
-      '@/hooks': '../../packages/backend/src/hooks',
+      '@/components': path.resolve(__dirname, '../../packages/backend/src/components'),
+      '@/lib': path.resolve(__dirname, '../../packages/backend/src/lib'),
+      '@/contexts': path.resolve(__dirname, '../../packages/backend/src/contexts'),
+      '@/hooks': path.resolve(__dirname, '../../packages/backend/src/hooks'),
     },
   },
 
