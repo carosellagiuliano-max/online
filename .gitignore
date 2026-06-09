@@ -37,3 +37,6 @@ next-env.d.ts
 
 .vscode
 .ansible
+
+# Playwright MCP debug artifacts
+.playwright-mcp/
