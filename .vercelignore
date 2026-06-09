@@ -1,0 +1,16 @@
+node_modules
+**/node_modules
+.next
+**/.next
+.pnpm-store
+coverage
+playwright-report
+test-results
+
+.replit
+replit.nix
+replit.md
+theme-previews
+
+apps/frontend-schnittwerk/e2e
+apps/frontend-template/e2e

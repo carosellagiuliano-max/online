@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "NPM_CONFIG_REGISTRY=https://registry.npmjs.org corepack pnpm install --frozen-lockfile --registry=https://registry.npmjs.org",
+  "buildCommand": "corepack pnpm build",
+  "devCommand": "corepack pnpm dev",
+  "outputDirectory": "apps/frontend-schnittwerk/.next",
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_MOCK_MODE": "true",
+      "PAYMENT_PROVIDER": "pay_at_venue",
+      "NEXT_PUBLIC_PAYMENT_PROVIDER": "pay_at_venue",
+      "NEXT_PUBLIC_FEATURE_SHOP_ENABLED": "true",
+      "NEXT_PUBLIC_FEATURE_BOOKING_ENABLED": "true",
+      "NEXT_PUBLIC_FEATURE_GALLERY_ENABLED": "true",
+      "NEXT_PUBLIC_FEATURE_FINANCE_ENABLED": "true"
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_MOCK_MODE": "true",
+    "PAYMENT_PROVIDER": "pay_at_venue",
+    "NEXT_PUBLIC_PAYMENT_PROVIDER": "pay_at_venue",
+    "NEXT_PUBLIC_FEATURE_SHOP_ENABLED": "true",
+    "NEXT_PUBLIC_FEATURE_BOOKING_ENABLED": "true",
+    "NEXT_PUBLIC_FEATURE_GALLERY_ENABLED": "true",
+    "NEXT_PUBLIC_FEATURE_FINANCE_ENABLED": "true"
+  }
+}
