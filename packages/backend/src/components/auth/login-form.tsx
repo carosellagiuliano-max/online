@@ -81,6 +81,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
             name="email"
             type="email"
             placeholder="ihre@email.ch"
+            defaultValue={isMockMode ? MOCK_CUSTOMER_USER.email : undefined}
             required
             disabled={isLoading}
             className="pl-10"
@@ -106,6 +107,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
             name="password"
             type="password"
             placeholder="••••••••"
+            defaultValue={isMockMode ? MOCK_CUSTOMER_USER.password : undefined}
             required
             disabled={isLoading}
             className="pl-10"

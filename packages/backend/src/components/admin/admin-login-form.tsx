@@ -22,8 +22,9 @@ const isMockMode = process.env.NEXT_PUBLIC_MOCK_MODE === 'true';
 
 export function AdminLoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // Mock mode: pre-fill the demo admin credentials for one-click login
+  const [email, setEmail] = useState(isMockMode ? MOCK_ADMIN_USER.email : '');
+  const [password, setPassword] = useState(isMockMode ? MOCK_ADMIN_USER.password : '');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

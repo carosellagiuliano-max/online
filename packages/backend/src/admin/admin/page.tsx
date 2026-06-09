@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { getCurrentStaffMember, type StaffMember } from '@/lib/auth/rbac';
+import { isMockMode } from '@/lib/mock/mock-auth';
+import { MOCK_ANALYTICS, MOCK_APPOINTMENTS, MOCK_ORDERS } from '@/lib/mock/mock-data';
 import { AdminDashboardContent } from '@/components/admin/admin-dashboard-content';
 
 // Force dynamic rendering (API not available at build time)
@@ -132,6 +134,57 @@ function emptyDashboardData(): {
     todayAppointments: [],
     recentOrders: [],
     attentionItems: [],
+  };
+}
+
+function mockDashboardData(): {
+  stats: DashboardStats;
+  todayAppointments: TodayAppointment[];
+  recentOrders: RecentOrder[];
+  attentionItems: DashboardAttentionItem[];
+} {
+  const stats: DashboardStats = {
+    todayAppointments: MOCK_ANALYTICS.appointments.today,
+    weekAppointments: MOCK_ANALYTICS.appointments.week,
+    pendingOrders: MOCK_ORDERS.filter((order) => order.status === 'pending').length,
+    monthlyRevenue: MOCK_ANALYTICS.revenue.month * 100, // formatCurrency expects cents
+    newCustomers: MOCK_ANALYTICS.customers.new_this_month,
+    cancelledAppointments: MOCK_ANALYTICS.appointments.cancelled,
+    pendingApprovals: MOCK_ANALYTICS.appointments.pending,
+    unassignedAppointments: 0,
+    unpaidCompletedAppointments: 0,
+    failedNotifications: 0,
+    contactsWithoutAccount: 0,
+    lowStockProducts: MOCK_ANALYTICS.products.low_stock,
+    activeWaitlist: 0,
+  };
+
+  const todayAppointments: TodayAppointment[] = MOCK_APPOINTMENTS
+    .filter((apt) => ACTIVE_APPOINTMENT_STATUSES.includes(apt.status))
+    .map((apt) => ({
+      id: apt.id,
+      time: apt.start_time,
+      customerName: `${apt.customer.first_name} ${apt.customer.last_name}`,
+      serviceName: apt.service.name,
+      staffName: `${apt.staff.first_name} ${apt.staff.last_name}`,
+      status: apt.status,
+      duration: apt.service.duration_minutes,
+    }));
+
+  const recentOrders: RecentOrder[] = MOCK_ORDERS.map((order, index) => ({
+    id: order.id,
+    orderNumber: `BP-${1001 + index}`,
+    customerEmail: order.customer.email,
+    totalCents: Math.round(order.total * 100),
+    status: order.status,
+    createdAt: order.created_at,
+  }));
+
+  return {
+    stats,
+    todayAppointments,
+    recentOrders,
+    attentionItems: buildAttentionItems(stats),
   };
 }
 
@@ -304,6 +357,11 @@ async function getDashboardData() {
   const staffMember = await getCurrentStaffMember();
   if (!staffMember) {
     redirect('/admin/login');
+  }
+
+  // Mock mode: serve demo stats instead of querying Supabase
+  if (isMockMode()) {
+    return mockDashboardData();
   }
 
   const supabase = createServiceRoleClient();

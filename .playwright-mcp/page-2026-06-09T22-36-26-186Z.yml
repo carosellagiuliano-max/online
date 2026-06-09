@@ -1,0 +1,214 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - link "BeautifyPRO Demo Salon" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img [ref=e7]
+        - generic [ref=e11]: BeautifyPRO Demo Salon
+      - navigation [ref=e12]:
+        - link "Home" [ref=e13] [cursor=pointer]:
+          - /url: /
+          - text: Home
+        - link "Leistungen" [ref=e15] [cursor=pointer]:
+          - /url: /leistungen
+          - text: Leistungen
+        - link "Galerie" [ref=e17] [cursor=pointer]:
+          - /url: /galerie
+          - text: Galerie
+        - link "Über uns" [ref=e19] [cursor=pointer]:
+          - /url: /ueber-uns
+          - text: Über uns
+        - link "Team" [ref=e21] [cursor=pointer]:
+          - /url: /team
+          - text: Team
+        - link "Kontakt" [ref=e23] [cursor=pointer]:
+          - /url: /kontakt
+          - text: Kontakt
+        - link "Shop" [ref=e25] [cursor=pointer]:
+          - /url: /shop
+          - text: Shop
+      - generic [ref=e27]:
+        - 'link "Telefon: +41 71 123 45 67" [ref=e28] [cursor=pointer]':
+          - /url: tel:+41711234567
+          - img
+        - button "Warenkorb öffnen" [ref=e29]:
+          - img
+        - link "Anmelden" [ref=e30] [cursor=pointer]:
+          - /url: /konto/login
+          - img
+        - button "Darkmode aktivieren" [ref=e31]:
+          - img
+        - link "Termin buchen" [ref=e32] [cursor=pointer]:
+          - /url: /termin-buchen
+          - img
+          - text: Termin buchen
+  - main [ref=e33]:
+    - generic [ref=e158]:
+      - navigation [ref=e159]:
+        - link "Startseite" [ref=e160] [cursor=pointer]:
+          - /url: /
+        - img [ref=e161]
+        - generic [ref=e163]: Mein Konto
+      - generic [ref=e164]:
+        - generic [ref=e165]:
+          - img [ref=e166]
+          - generic [ref=e172]:
+            - heading "Mein Konto" [level=1] [ref=e173]
+            - paragraph [ref=e174]: Willkommen, Mia!
+        - button "Abmelden" [ref=e176]:
+          - img
+          - text: Abmelden
+      - generic [ref=e177]:
+        - complementary [ref=e178]:
+          - navigation [ref=e179]:
+            - link "Meine Termine" [ref=e180] [cursor=pointer]:
+              - /url: /konto/termine
+              - img [ref=e181]
+              - generic [ref=e183]: Meine Termine
+            - link "Meine Bestellungen" [ref=e184] [cursor=pointer]:
+              - /url: /konto/bestellungen
+              - img [ref=e185]
+              - generic [ref=e188]: Meine Bestellungen
+            - link "Mein Profil" [ref=e189] [cursor=pointer]:
+              - /url: /konto/profil
+              - img [ref=e190]
+              - generic [ref=e193]: Mein Profil
+          - generic [ref=e194]:
+            - paragraph [ref=e195]: Neuen Termin buchen?
+            - link "Jetzt buchen" [ref=e196] [cursor=pointer]:
+              - /url: /termin-buchen
+        - main [ref=e197]:
+          - generic [ref=e198]:
+            - generic [ref=e199]:
+              - heading "Meine Termine" [level=2] [ref=e200]
+              - link "Neuer Termin" [ref=e201] [cursor=pointer]:
+                - /url: /termin-buchen
+                - img
+                - text: Neuer Termin
+            - generic [ref=e202]:
+              - tablist [ref=e203]:
+                - tab "Anstehend (1)" [selected] [ref=e204]
+                - tab "Vergangene (2)" [ref=e205]
+              - tabpanel "Anstehend (1)" [ref=e206]:
+                - generic [ref=e210]:
+                  - generic [ref=e211]:
+                    - paragraph [ref=e212]: "10"
+                    - paragraph [ref=e213]: Juni
+                  - generic [ref=e214]:
+                    - generic [ref=e215]:
+                      - generic [ref=e216]:
+                        - paragraph [ref=e217]: Balayage
+                        - generic [ref=e218]:
+                          - img
+                          - text: Bestätigt
+                      - paragraph [ref=e219]: CHF 250.00
+                    - generic [ref=e220]:
+                      - generic [ref=e221]:
+                        - img [ref=e222]
+                        - generic [ref=e225]: Mittwoch, 10. Juni 2026
+                        - generic [ref=e226]: 09:00 - 12:00 Uhr
+                      - generic [ref=e227]:
+                        - img [ref=e228]
+                        - generic [ref=e231]: Alex Berger
+                      - generic [ref=e232]:
+                        - img [ref=e233]
+                        - generic [ref=e236]: BeautifyPRO Demo Salon, Rorschacherstrasse 152
+                    - button "Termin stornieren" [ref=e238]:
+                      - img
+                      - text: Termin stornieren
+  - contentinfo [ref=e77]:
+    - generic [ref=e79]:
+      - generic [ref=e80]:
+        - link "BeautifyPRO Demo Salon" [ref=e81] [cursor=pointer]:
+          - /url: /
+          - heading "BeautifyPRO Demo Salon" [level=2] [ref=e82]
+        - paragraph [ref=e83]: Demo-Salon fuer Beauty, Booking und Shop
+        - paragraph [ref=e84]: BeautifyPRO Demo zeigt Terminbuchung, Kundenportal, Adminportal und Shop mit sicheren Mockdaten.
+        - generic [ref=e85]:
+          - link "Instagram" [ref=e86] [cursor=pointer]:
+            - /url: https://www.instagram.com/beautifypro.demo
+            - img
+          - link "Facebook" [ref=e87] [cursor=pointer]:
+            - /url: https://www.facebook.com/beautifypro.demo
+            - img
+        - paragraph [ref=e88]:
+          - text: Powered by
+          - link "beautifypro.ch" [ref=e89] [cursor=pointer]:
+            - /url: https://beautifypro.ch
+      - generic [ref=e90]:
+        - heading "Kontakt" [level=3] [ref=e91]
+        - list [ref=e92]:
+          - listitem [ref=e93]:
+            - link "Rorschacherstrasse 152 9000 St. Gallen" [ref=e94] [cursor=pointer]:
+              - /url: https://maps.google.com/?q=Rorschacherstrasse%20152%2C%209000%20St.%20Gallen
+              - img [ref=e95]
+              - generic [ref=e98]:
+                - text: Rorschacherstrasse 152
+                - text: 9000 St. Gallen
+          - listitem [ref=e99]:
+            - link "+41 71 123 45 67" [ref=e100] [cursor=pointer]:
+              - /url: tel:+41711234567
+              - img [ref=e101]
+              - text: +41 71 123 45 67
+          - listitem [ref=e103]:
+            - link "info@beautifypro.demo" [ref=e104] [cursor=pointer]:
+              - /url: mailto:info@beautifypro.demo
+              - img [ref=e105]
+              - text: info@beautifypro.demo
+      - generic [ref=e108]:
+        - heading "Öffnungszeiten" [level=3] [ref=e109]
+        - list [ref=e110]:
+          - listitem [ref=e111]:
+            - generic [ref=e112]: Montag
+            - generic [ref=e113]: 09:00 - 18:00
+          - listitem [ref=e114]:
+            - generic [ref=e115]: Dienstag
+            - generic [ref=e116]: 09:00 - 18:00
+          - listitem [ref=e117]:
+            - generic [ref=e118]: Mittwoch
+            - generic [ref=e119]: 09:00 - 18:00
+          - listitem [ref=e120]:
+            - generic [ref=e121]: Donnerstag
+            - generic [ref=e122]: 09:00 - 20:00
+          - listitem [ref=e123]:
+            - generic [ref=e124]: Freitag
+            - generic [ref=e125]: 09:00 - 18:00
+          - listitem [ref=e126]:
+            - generic [ref=e127]: Samstag
+            - generic [ref=e128]: 09:00 - 14:00
+          - listitem [ref=e129]:
+            - generic [ref=e130]: Sonntag
+            - generic [ref=e131]: Geschlossen
+      - generic [ref=e132]:
+        - heading "Quick Links" [level=3] [ref=e133]
+        - list [ref=e134]:
+          - listitem [ref=e135]:
+            - link "Leistungen" [ref=e136] [cursor=pointer]:
+              - /url: /leistungen
+          - listitem [ref=e137]:
+            - link "Online Termin" [ref=e138] [cursor=pointer]:
+              - /url: /termin-buchen
+          - listitem [ref=e139]:
+            - link "Shop" [ref=e140] [cursor=pointer]:
+              - /url: /shop
+          - listitem [ref=e141]:
+            - link "Gutscheine" [ref=e142] [cursor=pointer]:
+              - /url: /shop/gutscheine
+          - listitem [ref=e143]:
+            - link "Kontakt" [ref=e144] [cursor=pointer]:
+              - /url: /kontakt
+        - link "Jetzt Termin buchen" [ref=e145] [cursor=pointer]:
+          - /url: /termin-buchen
+    - generic [ref=e148]:
+      - paragraph [ref=e149]: © 2026 BeautifyPRO Demo Salon. Alle Rechte vorbehalten.
+      - navigation [ref=e150]:
+        - link "Impressum" [ref=e151] [cursor=pointer]:
+          - /url: /impressum
+        - link "Datenschutz" [ref=e152] [cursor=pointer]:
+          - /url: /datenschutz
+        - link "AGB" [ref=e153] [cursor=pointer]:
+          - /url: /agb
+        - link "Admin" [ref=e154] [cursor=pointer]:
+          - /url: /admin
+  - region "Notifications alt+T" [ref=e155]
+  - alert [ref=e156]: Meine Termine | BeautifyPRO Demo Salon

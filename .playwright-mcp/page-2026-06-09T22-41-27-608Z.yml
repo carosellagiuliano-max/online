@@ -1,0 +1,154 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: DEMO-MODUS - Keine echte Datenbank verbunden
+      - complementary [ref=e6]:
+        - generic [ref=e7]:
+          - link "Control Panel" [ref=e8] [cursor=pointer]:
+            - /url: /admin
+            - img [ref=e9]
+            - generic [ref=e15]: Control Panel
+          - button "Sidebar einklappen" [ref=e16]:
+            - img
+        - navigation [ref=e17]:
+          - link "Dashboard" [ref=e18] [cursor=pointer]:
+            - /url: /admin
+            - img [ref=e19]
+            - generic [ref=e24]: Dashboard
+          - link "Kalender" [ref=e25] [cursor=pointer]:
+            - /url: /admin/kalender
+            - img [ref=e26]
+            - generic [ref=e28]: Kalender
+          - link "Kunden" [ref=e29] [cursor=pointer]:
+            - /url: /admin/kunden
+            - img [ref=e30]
+            - generic [ref=e35]: Kunden
+          - button "Shop" [ref=e37]:
+            - img [ref=e38]
+            - generic [ref=e41]: Shop
+            - img [ref=e42]
+          - link "Team" [ref=e44] [cursor=pointer]:
+            - /url: /admin/team
+            - img [ref=e45]
+            - generic [ref=e57]: Team
+          - link "Analytics" [ref=e58] [cursor=pointer]:
+            - /url: /admin/analytics
+            - img [ref=e59]
+            - generic [ref=e61]: Analytics
+          - link "Finanzen" [ref=e62] [cursor=pointer]:
+            - /url: /admin/finanzen
+            - img [ref=e63]
+            - generic [ref=e66]: Finanzen
+          - link "Mitteilungen" [ref=e67] [cursor=pointer]:
+            - /url: /admin/mitteilungen
+            - img [ref=e68]
+            - generic [ref=e71]: Mitteilungen
+          - link "Kontaktanfragen" [ref=e72] [cursor=pointer]:
+            - /url: /admin/kontaktanfragen
+            - img [ref=e73]
+            - generic [ref=e75]: Kontaktanfragen
+          - link "Bewertungen" [ref=e76] [cursor=pointer]:
+            - /url: /admin/bewertungen
+            - img [ref=e77]
+            - generic [ref=e79]: Bewertungen
+          - link "Galerie" [ref=e80] [cursor=pointer]:
+            - /url: /admin/galerie
+            - img [ref=e81]
+            - generic [ref=e85]: Galerie
+          - link "Benachrichtigungen" [ref=e86] [cursor=pointer]:
+            - /url: /admin/benachrichtigungen
+            - img [ref=e87]
+            - generic [ref=e90]: Benachrichtigungen
+          - link "Datenexport" [ref=e91] [cursor=pointer]:
+            - /url: /admin/export
+            - img [ref=e92]
+            - generic [ref=e95]: Datenexport
+        - generic [ref=e96]:
+          - link "Einstellungen" [ref=e97] [cursor=pointer]:
+            - /url: /admin/einstellungen
+            - img [ref=e98]
+            - generic [ref=e101]: Einstellungen
+          - link "Hilfe" [ref=e102] [cursor=pointer]:
+            - /url: /admin/hilfe
+            - img [ref=e103]
+            - generic [ref=e106]: Hilfe
+        - generic [ref=e108]:
+          - generic [ref=e110]: A
+          - generic [ref=e111]:
+            - paragraph [ref=e112]: Alex Berger
+            - paragraph [ref=e113]: Administrator
+          - button [ref=e115]:
+            - img
+      - generic [ref=e116]:
+        - generic [ref=e117]:
+          - heading "Kundenverwaltung" [level=1] [ref=e119]
+          - generic [ref=e120]:
+            - link "Website öffnen" [ref=e121] [cursor=pointer]:
+              - /url: /
+              - img
+              - generic [ref=e122]: Website öffnen
+            - button "Benachrichtigungen" [ref=e123]:
+              - img
+              - generic [ref=e124]: Benachrichtigungen
+            - button "A" [ref=e125]:
+              - generic [ref=e127]: A
+        - main [ref=e128]:
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - generic [ref=e133]:
+                - generic [ref=e134]:
+                  - paragraph [ref=e135]: Kunden
+                  - generic [ref=e136]: "0"
+                  - paragraph [ref=e137]: 0 aktiv
+                - img [ref=e138]
+              - generic [ref=e144]:
+                - generic [ref=e145]:
+                  - paragraph [ref=e146]: Mit Konto
+                  - generic [ref=e147]: "0"
+                  - paragraph [ref=e148]: Login-fähig verknüpft
+                - img [ref=e149]
+              - generic [ref=e154]:
+                - generic [ref=e155]:
+                  - paragraph [ref=e156]: Kontakte
+                  - generic [ref=e157]: "0"
+                  - paragraph [ref=e158]: ohne Kundenkonto
+                - img [ref=e159]
+              - generic [ref=e163]:
+                - generic [ref=e164]:
+                  - paragraph [ref=e165]: Termine
+                  - generic [ref=e166]: "0"
+                  - paragraph [ref=e167]: nicht stornierte Buchungen
+                - img [ref=e168]
+            - generic [ref=e170]:
+              - generic [ref=e171]:
+                - generic [ref=e172]:
+                  - generic [ref=e173]:
+                    - generic [ref=e174]: Kundenübersicht
+                    - paragraph [ref=e175]: 0 Treffer.
+                  - button "Neuer Kunde" [ref=e176]:
+                    - img
+                    - text: Neuer Kunde
+                - generic [ref=e177]:
+                  - generic [ref=e178]:
+                    - img [ref=e179]
+                    - searchbox "Name, E-Mail oder Telefon suchen..." [ref=e182]
+                  - button "Suchen" [ref=e184]
+              - table [ref=e188]:
+                - rowgroup [ref=e189]:
+                  - row "Name E-Mail Telefon Termine Erstellt am Status" [ref=e190]:
+                    - columnheader "Name" [ref=e191]
+                    - columnheader "E-Mail" [ref=e192]
+                    - columnheader "Telefon" [ref=e193]
+                    - columnheader "Termine" [ref=e194]
+                    - columnheader "Erstellt am" [ref=e195]
+                    - columnheader "Status" [ref=e196]
+                    - columnheader [ref=e197]
+                - rowgroup [ref=e198]:
+                  - row "Keine Kunden gefunden" [ref=e199]:
+                    - cell "Keine Kunden gefunden" [ref=e200]:
+                      - generic [ref=e201]:
+                        - img [ref=e202]
+                        - paragraph [ref=e205]: Keine Kunden gefunden
+      - region "Notifications alt+T"
+  - region "Notifications alt+T"
+  - alert [ref=e206]

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
+import { isMockMode, getMockUser, getMockStaffMember } from '@/lib/mock/mock-auth';
 import { isSuperadminEmail, createSuperadminStaffMember } from './superadmin';
 
 // ============================================
@@ -50,6 +51,15 @@ export function hasAllowedRole(userRole: StaffRole, allowedRoles: StaffRole[]): 
  * Also handles superadmin support account
  */
 export async function getCurrentStaffMember(): Promise<StaffMember | null> {
+  // Mock mode: session lives in the mock cookies, no Supabase available
+  if (isMockMode()) {
+    const mockUser = await getMockUser();
+    if (!mockUser) {
+      return null;
+    }
+    return (await getMockStaffMember(mockUser.id)) as StaffMember | null;
+  }
+
   const supabase = await createServerClient();
 
   const { data: { user } } = await supabase.auth.getUser();

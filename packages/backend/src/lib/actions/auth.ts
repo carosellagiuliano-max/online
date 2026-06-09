@@ -1,6 +1,7 @@
 'use server';
 
 import { createServerClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { cookies } from 'next/headers';
 import { z } from 'zod';
 import { isMockMode, getMockUser } from '@/lib/mock/mock-auth';
 import { MOCK_CUSTOMERS, MOCK_SALON } from '@/lib/mock/mock-data';
@@ -432,6 +433,14 @@ export async function getCurrentUser() {
 // ============================================
 
 export async function logout() {
+  // Mock mode: clear the mock session cookies, no Supabase available
+  if (isMockMode()) {
+    const cookieStore = await cookies();
+    cookieStore.delete('mock_session');
+    cookieStore.delete('mock_user');
+    return;
+  }
+
   const supabase = await createServerClient() as any;
   await supabase.auth.signOut();
 }

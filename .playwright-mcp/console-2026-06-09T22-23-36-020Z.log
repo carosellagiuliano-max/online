@@ -1,0 +1,3 @@
+[     680ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://online-frontend-schnittwerk.vercel.app/icon.svg:0
+[   22487ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://online-frontend-schnittwerk.vercel.app/api/admin/notifications?limit=5:0
+[   22488ms] [ERROR] Failed to fetch notifications: 401 {error: Nicht autorisiert} @ https://online-frontend-schnittwerk.vercel.app/_next/static/chunks/9bb79f492734f6fd.js:0

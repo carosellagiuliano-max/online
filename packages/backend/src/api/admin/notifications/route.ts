@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient as createAuthClient } from '@/lib/supabase/server';
 import { createServerClient } from '@/lib/db/client';
 import { resolveStaffSalonId } from '@/lib/auth/admin-context';
+import { isMockMode, getMockUser } from '@/lib/mock/mock-auth';
 
 // ============================================
 // GET - Fetch Admin Notifications
@@ -9,6 +10,15 @@ import { resolveStaffSalonId } from '@/lib/auth/admin-context';
 
 export async function GET(request: NextRequest) {
   try {
+    // Mock mode: no notifications backend, return an empty inbox
+    if (isMockMode()) {
+      const mockUser = await getMockUser();
+      if (!mockUser) {
+        return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 });
+      }
+      return NextResponse.json({ notifications: [], unreadCount: 0 });
+    }
+
     const authClient = await createAuthClient();
     const supabase = createServerClient();
 
@@ -108,6 +118,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Mock mode: nothing to mark as read, report success
+    if (isMockMode()) {
+      const mockUser = await getMockUser();
+      if (!mockUser) {
+        return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 });
+      }
+      return NextResponse.json({ success: true });
+    }
+
     const authClient = await createAuthClient();
     const supabase = createServerClient();
 
