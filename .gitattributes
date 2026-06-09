@@ -1,0 +1,22 @@
+# Auto detect text files and normalize line endings
+* text=auto
+
+# Force LF line endings for shell scripts (critical for Docker)
+*.sh text eol=lf
+
+# Force LF for Docker files
+Dockerfile* text eol=lf
+docker-compose*.yml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary

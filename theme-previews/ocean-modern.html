@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ocean Modern - Theme Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       OCEAN COLOR THEME
+       Fresh Blue & Teal - Modern Spa
+       ======================================== */
+    :root {
+      --gold: #3B82F6;
+      --gold-light: #93C5FD;
+      --gold-dark: #1D4ED8;
+      --rose: #14B8A6;
+      --rose-light: #5EEAD4;
+      --rose-dark: #0D9488;
+      --cream: #F8FAFC;
+      --charcoal: #0F172A;
+
+      --background: #F8FAFC;
+      --foreground: #0F172A;
+      --card: #FFFFFF;
+      --card-foreground: #0F172A;
+      --primary: #2563EB;
+      --primary-foreground: #FFFFFF;
+      --secondary: #E0F2FE;
+      --secondary-foreground: #1E3A5F;
+      --muted: #F1F5F9;
+      --muted-foreground: #64748B;
+      --accent: #CCFBF1;
+      --accent-foreground: #134E4A;
+      --border: #E2E8F0;
+
+      --radius: 0;
+    }
+
+    /* ========================================
+       MODERN STRUCTURE THEME
+       Geometric, clean lines, Bauhaus-inspired
+       ======================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    /* Header - Solid with border */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      background: var(--background);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--foreground);
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--foreground);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.2s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      padding: 1rem 1.75rem;
+      border-radius: 0;
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--rose);
+      transform: translateX(-101%);
+      transition: transform 0.3s ease;
+    }
+
+    .btn-primary:hover::after {
+      transform: translateX(0);
+    }
+
+    /* Hero - Split style */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem;
+    }
+
+    .hero-tagline {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      padding: 0.25rem 0.75rem;
+      display: inline-block;
+      margin-bottom: 2rem;
+      width: fit-content;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .hero h1::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: var(--primary);
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--muted-foreground);
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--foreground);
+      padding: 1rem 1.75rem;
+      border-radius: 0;
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      border: 2px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .hero-image {
+      background: linear-gradient(135deg, var(--gold-light), var(--rose-light));
+      position: relative;
+    }
+
+    .hero-image::before {
+      content: '';
+      position: absolute;
+      inset: 2rem;
+      border: 2px solid var(--primary);
+    }
+
+    /* Sections */
+    .section {
+      padding: 4rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      padding: 0.25rem 0.75rem;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .section-header p {
+      color: var(--muted-foreground);
+      font-weight: 400;
+    }
+
+    /* Cards - Bordered */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+      background: var(--border);
+      padding: 2px;
+    }
+
+    .card {
+      background: var(--background);
+      border: 2px solid var(--border);
+      border-radius: 0;
+      padding: 2rem;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 4px;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--primary);
+    }
+
+    .card:hover::after {
+      width: 100%;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      color: var(--primary-foreground);
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* Services Grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+      background: var(--border);
+      padding: 2px;
+    }
+
+    .service-card {
+      padding: 2.5rem;
+    }
+
+    .service-card .category {
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--primary);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 0.25rem 0.5rem;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card p {
+      color: var(--muted-foreground);
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.25rem;
+      border-top: 2px solid var(--border);
+    }
+
+    .service-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .service-duration {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* Gallery - Slider style (simplified grid) */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: var(--border);
+      padding: 2px;
+    }
+
+    .gallery-item {
+      aspect-ratio: 1;
+      background: var(--background);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 4rem 2rem;
+      background: var(--background);
+      color: var(--foreground);
+      text-align: center;
+      border-top: 4px solid var(--primary);
+      border-bottom: 4px solid var(--primary);
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-section p {
+      color: var(--muted-foreground);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      background: var(--background);
+      border-top: 2px solid var(--border);
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-section h4 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+      color: var(--foreground);
+    }
+
+    .footer-section p,
+    .footer-section a {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 2rem auto 0;
+      padding-top: 2rem;
+      border-top: 2px solid var(--border);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-image {
+        display: none;
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      nav {
+        display: none;
+      }
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">OCEAN SPA</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Leistungen</a>
+        <a href="#">Galerie</a>
+        <a href="#">Kontakt</a>
+      </nav>
+      <a href="#" class="btn-primary">Termin buchen</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tagline">Contemporary Spa</span>
+      <h1>Fresh. Modern. You.</h1>
+      <p>Erleben Sie Entspannung neu definiert. Moderne Behandlungen in zeitgemässem Ambiente.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn-primary">Termin buchen</a>
+        <a href="#" class="btn-secondary">Mehr erfahren</a>
+      </div>
+    </div>
+    <div class="hero-image"></div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+          </div>
+          <h3>Standort</h3>
+          <p>Musterstrasse 123, 9000 St. Gallen</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3>Öffnungszeiten</h3>
+          <p>Di-Fr 09:00-18:00, Sa 09:00-16:00</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+          </div>
+          <h3>Premium Services</h3>
+          <p>Wellness, Massage, Treatments</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Services</p>
+        <h2>Beliebte Treatments</h2>
+        <p>Moderne Behandlungen für Körper und Geist.</p>
+      </div>
+      <div class="services-grid">
+        <div class="card service-card">
+          <span class="category">Wellness</span>
+          <h3>Signature Massage</h3>
+          <p>Entspannende Ganzkörpermassage mit ätherischen Ölen</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 120</span>
+            <span class="service-duration">60 Min.</span>
+          </div>
+        </div>
+        <div class="card service-card">
+          <span class="category">Treatment</span>
+          <h3>Hydra Facial</h3>
+          <p>Tiefenreinigung und intensive Feuchtigkeitspflege</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 150</span>
+            <span class="service-duration">75 Min.</span>
+          </div>
+        </div>
+        <div class="card service-card">
+          <span class="category">Relax</span>
+          <h3>Hot Stone</h3>
+          <p>Warme Lavasteine für tiefe Entspannung</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 140</span>
+            <span class="service-duration">90 Min.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Galerie</p>
+        <h2>Einblicke</h2>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--gold-light), var(--rose-light));"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose-light), var(--gold-light));"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--gold), var(--rose));"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose), var(--gold));"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--cream), var(--gold-light));"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--gold-light), var(--cream));"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose-light), var(--rose));"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose), var(--rose-light));"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Zeit für Entspannung</h2>
+      <p>Buchen Sie jetzt Ihren Wohlfühltermin.</p>
+      <a href="#" class="btn-primary">Jetzt buchen</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Ocean Spa</h4>
+        <p>Contemporary Wellness</p>
+      </div>
+      <div class="footer-section">
+        <h4>Kontakt</h4>
+        <p>Musterstrasse 123</p>
+        <p>9000 St. Gallen</p>
+      </div>
+      <div class="footer-section">
+        <h4>Links</h4>
+        <a href="#">Leistungen</a>
+        <a href="#">Galerie</a>
+        <a href="#">Kontakt</a>
+      </div>
+      <div class="footer-section">
+        <h4>Öffnungszeiten</h4>
+        <p>Di-Fr: 09:00-18:00</p>
+        <p>Sa: 09:00-16:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Ocean Spa. Theme: Ocean Modern</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeautifyPro Theme Showcase</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      color: #fff;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #C9A86C, #D4A5A5, #B8860B);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: rgba(255,255,255,0.7);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      padding: 2rem 0;
+    }
+
+    .theme-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .theme-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,255,255,0.2);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .theme-preview {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-preview iframe {
+      width: 200%;
+      height: 200%;
+      border: none;
+      transform: scale(0.5);
+      transform-origin: top left;
+      pointer-events: none;
+    }
+
+    .theme-info {
+      padding: 1.5rem;
+    }
+
+    .theme-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .theme-desc {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 1rem;
+    }
+
+    .theme-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .tag.color {
+      background: linear-gradient(135deg, var(--tag-color-1), var(--tag-color-2));
+    }
+
+    .view-btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #C9A86C, #B8860B);
+      color: #1a1a2e;
+      text-decoration: none;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+
+    .view-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 20px rgba(201, 168, 108, 0.4);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.875rem;
+    }
+
+    /* Theme-specific tag colors */
+    .beauty { --tag-color-1: #B8860B; --tag-color-2: #D4A5A5; }
+    .ocean { --tag-color-1: #2563EB; --tag-color-2: #14B8A6; }
+    .forest { --tag-color-1: #15803D; --tag-color-2: #A3A380; }
+    .midnight { --tag-color-1: #7C3AED; --tag-color-2: #C084FC; }
+    .dark { --tag-color-1: #60A5FA; --tag-color-2: #A78BFA; }
+    .brownie { --tag-color-1: #92400E; --tag-color-2: #D97706; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>BeautifyPro Themes</h1>
+      <p class="subtitle">Entdecken Sie unsere handverlesenen Theme-Kombinationen für Ihren Salon. Jedes Theme wurde sorgfältig für bestimmte Salon-Stile optimiert.</p>
+    </header>
+
+    <div class="grid">
+      <!-- BeautifyPRO + Classic -->
+      <div class="theme-card beauty">
+        <div class="theme-preview">
+          <iframe src="beauty-classic.html" loading="lazy"></iframe>
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">BeautifyPRO Classic</h3>
+          <p class="theme-desc">Elegante Rose-Gold Töne mit klassischem Layout - zeitlose Luxus-Ästhetik</p>
+          <div class="theme-tags">
+            <span class="tag color">Rose Gold</span>
+            <span class="tag">Klassisch</span>
+            <span class="tag">Luxus</span>
+          </div>
+          <a href="beauty-classic.html" class="view-btn" target="_blank">Vorschau öffnen</a>
+        </div>
+      </div>
+
+      <!-- BeautifyPRO + Elegant -->
+      <div class="theme-card beauty">
+        <div class="theme-preview">
+          <iframe src="beauty-elegant.html" loading="lazy"></iframe>
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">BeautifyPRO Elegant</h3>
+          <p class="theme-desc">Raffinierte Serif-Typografie mit goldenen Akzenten - High-End Boutique</p>
+          <div class="theme-tags">
+            <span class="tag color">Rose Gold</span>
+            <span class="tag">Elegant</span>
+            <span class="tag">Boutique</span>
+          </div>
+          <a href="beauty-elegant.html" class="view-btn" target="_blank">Vorschau öffnen</a>
+        </div>
+      </div>
+
+      <!-- Ocean + Modern -->
+      <div class="theme-card ocean">
+        <div class="theme-preview">
+          <iframe src="ocean-modern.html" loading="lazy"></iframe>
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">Ocean Modern</h3>
+          <p class="theme-desc">Frische Blau- und Türkistöne mit geometrischem Layout - Contemporary Spa</p>
+          <div class="theme-tags">
+            <span class="tag color">Blau</span>
+            <span class="tag">Modern</span>
+            <span class="tag">Spa</span>
+          </div>
+          <a href="ocean-modern.html" class="view-btn" target="_blank">Vorschau öffnen</a>
+        </div>
+      </div>
+
+      <!-- Ocean + Minimal -->
+      <div class="theme-card ocean">
+        <div class="theme-preview">
+          <iframe src="ocean-minimal.html" loading="lazy"></iframe>
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">Ocean Minimal</h3>
+          <p class="theme-desc">Ruhige Blautöne mit minimalistischem Design - Wellness Center</p>
+          <div class="theme-tags">
+            <span class="tag color">Blau</span>
+            <span class="tag">Minimal</span>
+            <span class="tag">Wellness</span>
+          </div>
+          <a href="ocean-minimal.html" class="view-btn" target="_blank">Vorschau öffnen</a>
+        </div>
+      </div>
+
+      <!-- Forest + Bold -->
+      <div class="theme-card forest">
+        <div class="theme-preview">
+          <iframe src="forest-bold.html" loading="lazy"></iframe>
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">Forest Bold</h3>
+          <p class="theme-desc">Natürliche Grüntöne mit dramatischem Layout - Organic Beauty Studio</p>
+          <div class="theme-tags">
+            <span class="tag color">Grün</span>
+            <span class="tag">Bold</span>
+            <span class="tag">Öko</span>
+          </div>
+          <a href="forest-bold.html" class="view-btn" target="_blank">Vorschau öffnen</a>
+        </div>
+      </div>
+
+      <!-- Midnight + Bold -->
+      <div class="theme-card midnight">
+        <div class="theme-preview">
+          <iframe src="midnight-bold.html" loading="lazy"></iframe>
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">Midnight Bold</h3>
+          <p class="theme-desc">Elegante Violett-Töne mit dramatischem Layout - Urban Studio</p>
+          <div class="theme-tags">
+            <span class="tag color">Violett</span>
+            <span class="tag">Bold</span>
+            <span class="tag">Urban</span>
+          </div>
+          <a href="midnight-bold.html" class="view-btn" target="_blank">Vorschau öffnen</a>
+        </div>
+      </div>
+
+      <!-- Dark + Modern -->
+      <div class="theme-card dark">
+        <div class="theme-preview">
+          <iframe src="dark-modern.html" loading="lazy"></iframe>
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">Dark Modern</h3>
+          <p class="theme-desc">Dunkles Theme mit klaren Linien - Edgy Barbershop</p>
+          <div class="theme-tags">
+            <span class="tag color">Dunkel</span>
+            <span class="tag">Modern</span>
+            <span class="tag">Barbershop</span>
+          </div>
+          <a href="dark-modern.html" class="view-btn" target="_blank">Vorschau öffnen</a>
+        </div>
+      </div>
+
+      <!-- Brownie + Classic -->
+      <div class="theme-card brownie">
+        <div class="theme-preview">
+          <iframe src="brownie-classic.html" loading="lazy"></iframe>
+        </div>
+        <div class="theme-info">
+          <h3 class="theme-name">Brownie Classic</h3>
+          <p class="theme-desc">Warme Schokoladen- und Karamelltöne - Gemütlicher Salon</p>
+          <div class="theme-tags">
+            <span class="tag color">Braun</span>
+            <span class="tag">Klassisch</span>
+            <span class="tag">Gemütlich</span>
+          </div>
+          <a href="brownie-classic.html" class="view-btn" target="_blank">Vorschau öffnen</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>BeautifyPro Theme System - Kombinieren Sie Farben und Strukturen für Ihren perfekten Look</p>
+    </footer>
+  </div>
+</body>
+</html>

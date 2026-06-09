@@ -1,0 +1,57 @@
+modules = ["nodejs-20"]
+entrypoint = "apps/frontend-schnittwerk/src/app/page.tsx"
+hidden = [
+  ".next",
+  ".pnpm-store",
+  "node_modules",
+  "apps/frontend-schnittwerk/.next",
+  "apps/frontend-template/.next",
+  "apps/frontend-schnittwerk/node_modules",
+  "apps/frontend-template/node_modules",
+  "packages/backend/node_modules",
+]
+
+# Replit Preview / Run button.
+# The app is a pnpm monorepo, so auto-detection is not enough.
+run = "NPM_CONFIG_REGISTRY=https://registry.npmjs.org/ npm_config_registry=https://registry.npmjs.org/ corepack pnpm install --frozen-lockfile --registry=https://registry.npmjs.org/ && corepack pnpm dev:replit"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix", "pnpm-workspace.yaml", "pnpm-lock.yaml"]
+
+[packager]
+language = "nodejs"
+ignoredPackages = [
+  "vite",
+  "@vitejs/plugin-react",
+  "react-scripts",
+]
+ignoredPaths = [
+  ".next",
+  ".pnpm-store",
+  "node_modules",
+  "apps/frontend-schnittwerk/.next",
+  "apps/frontend-template/.next",
+  "apps/frontend-schnittwerk/node_modules",
+  "apps/frontend-template/node_modules",
+  "packages/backend/node_modules",
+  "apps/frontend-schnittwerk/e2e",
+  "apps/frontend-template/e2e",
+  "theme-previews",
+]
+
+[packager.features]
+guessImports = false
+packageSearch = false
+enabledForHosting = false
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "cloudrun"
+build = "NPM_CONFIG_REGISTRY=https://registry.npmjs.org/ npm_config_registry=https://registry.npmjs.org/ corepack pnpm install --frozen-lockfile --registry=https://registry.npmjs.org/ && corepack pnpm build"
+run = "corepack pnpm start:replit"
+
+[[ports]]
+localPort = 3000
+externalPort = 80

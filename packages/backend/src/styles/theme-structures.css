@@ -1,0 +1,942 @@
+/* ============================================
+   SHARED THEME STRUCTURE STYLES
+   Global styles based on NEXT_PUBLIC_THEME_STRUCTURE
+   This file is shared between all frontend apps
+   ============================================ */
+
+/* Button border radius based on theme */
+body[data-button-style="pill"] button,
+body[data-button-style="pill"] .btn,
+body[data-button-style="pill"] [role="button"] {
+  border-radius: 9999px !important;
+}
+
+body[data-button-style="square"] button,
+body[data-button-style="square"] .btn,
+body[data-button-style="square"] [role="button"] {
+  border-radius: 0 !important;
+}
+
+body[data-button-style="minimal"] button,
+body[data-button-style="minimal"] .btn,
+body[data-button-style="minimal"] [role="button"] {
+  border-radius: 0.375rem !important;
+}
+
+/* Card styles based on theme */
+body[data-card-style="elevated"] [data-slot="card"] {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+  background-color: var(--card) !important;
+}
+
+body[data-card-style="elevated"] [data-slot="card"]:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+  transform: translateY(-2px);
+}
+
+body[data-card-style="flat"] [data-slot="card"] {
+  box-shadow: none !important;
+  background-color: hsl(var(--muted) / 0.5) !important;
+  border: none !important;
+}
+
+body[data-card-style="flat"] [data-slot="card"]:hover {
+  background-color: hsl(var(--muted)) !important;
+}
+
+body[data-card-style="bordered"] [data-slot="card"] {
+  box-shadow: none !important;
+  border: 2px solid var(--border) !important;
+  background-color: transparent !important;
+}
+
+body[data-card-style="bordered"] [data-slot="card"]:hover {
+  border-color: var(--primary) !important;
+}
+
+body[data-card-style="glass"] [data-slot="card"] {
+  backdrop-filter: blur(12px) !important;
+  background-color: hsl(var(--card) / 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+/* Border radius for cards based on theme */
+body[data-border-radius="none"] [data-slot="card"] {
+  border-radius: 0 !important;
+}
+
+body[data-border-radius="sm"] [data-slot="card"] {
+  border-radius: 0.5rem !important;
+}
+
+body[data-border-radius="md"] [data-slot="card"] {
+  border-radius: 0.75rem !important;
+}
+
+body[data-border-radius="lg"] [data-slot="card"] {
+  border-radius: 1rem !important;
+}
+
+body[data-border-radius="full"] [data-slot="card"] {
+  border-radius: 1.5rem !important;
+}
+
+/* ============================================
+   THEME STRUCTURE: MINIMAL
+   Ultra-clean, content-focused, lots of whitespace
+   Japanese zen aesthetic - maximum negative space
+   ============================================ */
+body[data-theme-structure="minimal"] {
+  --radius: 0.125rem;
+  letter-spacing: 0.02em;
+}
+
+body[data-theme-structure="minimal"] h1 {
+  font-weight: 200 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  font-size: 2rem !important;
+}
+
+@media (min-width: 1024px) {
+  body[data-theme-structure="minimal"] h1 {
+    font-size: 2.5rem !important;
+  }
+}
+
+body[data-theme-structure="minimal"] h2 {
+  font-weight: 300 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  font-size: 0.875rem !important;
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+body[data-theme-structure="minimal"] h3 {
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+}
+
+body[data-theme-structure="minimal"] p {
+  font-weight: 300 !important;
+  line-height: 2 !important;
+}
+
+body[data-theme-structure="minimal"] [data-slot="card"] {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  border-bottom: 1px solid hsl(var(--border) / 0.2) !important;
+  border-radius: 0 !important;
+  padding: 2rem 0 !important;
+}
+
+/* Restore proper card styling for booking confirmation in minimal theme */
+body[data-theme-structure="minimal"] .booking-form-stack [data-slot="card"],
+body[data-theme-structure="minimal"] .booking-confirmation-grid [data-slot="card"] {
+  background-color: var(--card) !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+  border-bottom: 1px solid hsl(var(--border) / 0.5) !important;
+  border-radius: 0.5rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Booking confirmation grid spacing in minimal theme */
+body[data-theme-structure="minimal"] .booking-confirmation-grid {
+  gap: 2rem !important;
+}
+
+body[data-theme-structure="minimal"] .booking-form-stack {
+  gap: 1.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Terms checkbox proper spacing in minimal theme */
+body[data-theme-structure="minimal"] .terms-checkbox {
+  padding: 1rem !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+  border-radius: 0.5rem !important;
+  background-color: var(--card) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Reset payment option labels and terms checkbox in minimal theme */
+body[data-theme-structure="minimal"] .payment-options label,
+body[data-theme-structure="minimal"] .terms-checkbox {
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  font-size: 1rem !important;
+}
+
+body[data-theme-structure="minimal"] .payment-options label p,
+body[data-theme-structure="minimal"] .terms-checkbox label {
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+body[data-theme-structure="minimal"] button:not(.calendar-grid button):not(.time-slots-grid button):not([role="radio"]):not([role="checkbox"]):not([data-slot="checkbox"]):not([data-radix-collection-item]) {
+  border-radius: 0 !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  font-size: 0.7rem !important;
+  padding: 0.75rem 2rem !important;
+  border-width: 1px !important;
+}
+
+/* Reset form control buttons in minimal theme */
+body[data-theme-structure="minimal"] button[role="radio"],
+body[data-theme-structure="minimal"] button[role="checkbox"],
+body[data-theme-structure="minimal"] button[data-slot="checkbox"],
+body[data-theme-structure="minimal"] [data-radix-collection-item] {
+  border-radius: 9999px !important;
+  padding: 0 !important;
+  font-weight: normal !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: inherit !important;
+}
+
+body[data-theme-structure="minimal"] button[data-slot="checkbox"] {
+  border-radius: 4px !important;
+}
+
+/* Reset calendar and time slot buttons in minimal theme */
+body[data-theme-structure="minimal"] .calendar-grid button,
+body[data-theme-structure="minimal"] .time-slots-grid button {
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  font-size: inherit !important;
+  padding: 0.375rem !important;
+  border-width: 1px !important;
+}
+
+@media (min-width: 640px) {
+  body[data-theme-structure="minimal"] .calendar-grid button {
+    padding: 0.75rem !important;
+  }
+  body[data-theme-structure="minimal"] .time-slots-grid button {
+    padding: 0.75rem 1rem !important;
+  }
+}
+
+body[data-theme-structure="minimal"] section {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+body[data-theme-structure="minimal"] .container-wide {
+  max-width: 800px !important;
+}
+
+/* Minimal Header - Clean with subtle separation */
+body[data-theme-structure="minimal"] header {
+  background: var(--background) !important;
+  border-bottom: 1px solid hsl(var(--border) / 0.3) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  z-index: 50 !important;
+  position: fixed !important;
+}
+
+/* Ensure main content doesn't overlap header in minimal theme */
+body[data-theme-structure="minimal"] main {
+  position: relative;
+  z-index: 1;
+}
+
+body[data-theme-structure="minimal"] header nav a {
+  font-weight: 300 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  font-size: 0.7rem !important;
+}
+
+body[data-theme-structure="minimal"] header button {
+  background: transparent !important;
+  border: 1px solid hsl(var(--border) / 0.3) !important;
+}
+
+/* Remove decorative backgrounds */
+body[data-theme-structure="minimal"] .bg-gradient-beauty,
+body[data-theme-structure="minimal"] .hero-gradient {
+  background: transparent !important;
+}
+
+body[data-theme-structure="minimal"] .fixed.-z-10 {
+  display: none !important;
+}
+
+/* ============================================
+   THEME STRUCTURE: BOLD
+   Dramatic, immersive, high contrast
+   Magazine-style with oversized typography
+   ============================================ */
+body[data-theme-structure="bold"] {
+  --radius: 2rem;
+}
+
+body[data-theme-structure="bold"] h1 {
+  font-weight: 900 !important;
+  font-size: 3rem !important;
+  line-height: 0.95 !important;
+  letter-spacing: -0.04em !important;
+  text-transform: uppercase !important;
+}
+
+@media (min-width: 768px) {
+  body[data-theme-structure="bold"] h1 {
+    font-size: 4.5rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  body[data-theme-structure="bold"] h1 {
+    font-size: 6rem !important;
+  }
+}
+
+body[data-theme-structure="bold"] h2 {
+  font-weight: 900 !important;
+  font-size: 2rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: -0.02em !important;
+}
+
+@media (min-width: 768px) {
+  body[data-theme-structure="bold"] h2 {
+    font-size: 3rem !important;
+  }
+}
+
+body[data-theme-structure="bold"] h3 {
+  font-weight: 800 !important;
+  font-size: 1.5rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+body[data-theme-structure="bold"] p {
+  font-size: 1.125rem !important;
+  line-height: 1.8 !important;
+}
+
+body[data-theme-structure="bold"] [data-slot="card"] {
+  border-radius: 2rem !important;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.3) !important;
+  transform: perspective(1000px) rotateX(2deg);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden !important;
+}
+
+body[data-theme-structure="bold"] [data-slot="card"]:hover {
+  transform: perspective(1000px) rotateX(0deg) translateY(-12px) scale(1.02) !important;
+  box-shadow: 0 40px 70px -20px rgb(0 0 0 / 0.4) !important;
+}
+
+body[data-theme-structure="bold"] button:not([role="radio"]):not([role="checkbox"]):not([data-slot="checkbox"]):not([data-radix-collection-item]) {
+  border-radius: 9999px !important;
+  padding: 1rem 2.5rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-size: 0.875rem !important;
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.2) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+body[data-theme-structure="bold"] button:not([role="radio"]):not([role="checkbox"]):not([data-slot="checkbox"]):not([data-radix-collection-item]):hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.3) !important;
+}
+
+/* Reset form control buttons (radio, checkbox) to normal styling */
+body[data-theme-structure="bold"] button[role="radio"],
+body[data-theme-structure="bold"] button[role="checkbox"],
+body[data-theme-structure="bold"] button[data-slot="checkbox"],
+body[data-theme-structure="bold"] [data-radix-collection-item] {
+  border-radius: 9999px !important;
+  padding: 0 !important;
+  font-weight: normal !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: inherit !important;
+  box-shadow: none !important;
+}
+
+body[data-theme-structure="bold"] button[data-slot="checkbox"] {
+  border-radius: 4px !important;
+}
+
+body[data-theme-structure="bold"] section {
+  padding-top: 6rem !important;
+  padding-bottom: 6rem !important;
+}
+
+@media (min-width: 768px) {
+  body[data-theme-structure="bold"] section {
+    padding-top: 8rem !important;
+    padding-bottom: 8rem !important;
+  }
+}
+
+/* Bold Header - Thick, prominent */
+body[data-theme-structure="bold"] header {
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+}
+
+body[data-theme-structure="bold"] header nav a {
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.8rem !important;
+}
+
+body[data-theme-structure="bold"] header .text-gradient-primary {
+  font-size: 1.75rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Dramatic grid for cards */
+body[data-theme-structure="bold"] .grid {
+  gap: 2rem !important;
+}
+
+@media (min-width: 768px) {
+  body[data-theme-structure="bold"] .grid {
+    gap: 3rem !important;
+  }
+}
+
+/* Exception: Booking grids need smaller gaps for proper layout */
+body[data-theme-structure="bold"] .time-slots-grid {
+  gap: 0.75rem !important;
+}
+
+body[data-theme-structure="bold"] .calendar-grid {
+  gap: 0.25rem !important;
+}
+
+@media (min-width: 640px) {
+  body[data-theme-structure="bold"] .calendar-grid {
+    gap: 0.5rem !important;
+  }
+}
+
+/* Booking confirmation page - reset bold theme overrides */
+body[data-theme-structure="bold"] .booking-confirmation-grid {
+  gap: 1.5rem !important;
+}
+
+@media (min-width: 1024px) {
+  body[data-theme-structure="bold"] .booking-confirmation-grid {
+    gap: 2rem !important;
+  }
+}
+
+body[data-theme-structure="bold"] .booking-form-grid {
+  gap: 1rem !important;
+}
+
+/* Reset card transforms in booking flow for proper alignment */
+body[data-theme-structure="bold"] .booking-form-stack [data-slot="card"],
+body[data-theme-structure="bold"] .booking-confirmation-grid [data-slot="card"] {
+  transform: none !important;
+}
+
+/* Payment options - prevent bold theme spacing */
+body[data-theme-structure="bold"] .payment-options {
+  gap: 1rem !important;
+}
+
+/* ============================================
+   THEME STRUCTURE: ELEGANT
+   Sophisticated luxury, refined details
+   Serif fonts, gold accents, high-end feel
+   ============================================ */
+body[data-theme-structure="elegant"] {
+  --radius: 0.5rem;
+}
+
+body[data-theme-structure="elegant"] h1 {
+  font-weight: 300 !important;
+  font-style: italic !important;
+  letter-spacing: 0.03em !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+}
+
+body[data-theme-structure="elegant"] h2 {
+  font-weight: 400 !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+  letter-spacing: 0.02em !important;
+  position: relative;
+  display: inline-block;
+}
+
+body[data-theme-structure="elegant"] h2::after {
+  content: '';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+body[data-theme-structure="elegant"] h3 {
+  font-weight: 400 !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-style: italic !important;
+}
+
+body[data-theme-structure="elegant"] p {
+  line-height: 1.9 !important;
+  letter-spacing: 0.01em !important;
+}
+
+body[data-theme-structure="elegant"] [data-slot="card"] {
+  border-radius: 0.25rem !important;
+  box-shadow: 0 2px 15px rgb(0 0 0 / 0.05) !important;
+  border: 1px solid hsl(var(--border) / 0.15) !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease !important;
+}
+
+body[data-theme-structure="elegant"] [data-slot="card"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 20%, var(--gold) 50%, transparent 80%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+body[data-theme-structure="elegant"] [data-slot="card"]:hover {
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.1) !important;
+  border-color: hsl(var(--border) / 0.3) !important;
+}
+
+body[data-theme-structure="elegant"] [data-slot="card"]:hover::before {
+  opacity: 1;
+}
+
+body[data-theme-structure="elegant"] button {
+  border-radius: 0.25rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  padding: 0.875rem 2rem !important;
+  transition: all 0.3s ease !important;
+}
+
+body[data-theme-structure="elegant"] button:hover {
+  letter-spacing: 0.15em !important;
+}
+
+body[data-theme-structure="elegant"] section {
+  padding-top: 5rem !important;
+  padding-bottom: 5rem !important;
+}
+
+/* Elegant Header - Refined, centered feel */
+body[data-theme-structure="elegant"] header {
+  border-bottom: 1px solid hsl(var(--border) / 0.1) !important;
+}
+
+body[data-theme-structure="elegant"] header nav a {
+  font-weight: 400 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  font-size: 0.7rem !important;
+  transition: letter-spacing 0.3s ease !important;
+}
+
+body[data-theme-structure="elegant"] header nav a:hover {
+  letter-spacing: 0.12em !important;
+}
+
+body[data-theme-structure="elegant"] header .text-gradient-primary {
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Elegant decorative dividers */
+body[data-theme-structure="elegant"] .text-center.mb-12::before {
+  content: '✦';
+  display: block;
+  font-size: 1rem;
+  color: var(--gold);
+  opacity: 0.6;
+  margin-bottom: 1rem;
+}
+
+/* Subtle background pattern */
+body[data-theme-structure="elegant"] .bg-gradient-beauty {
+  background:
+    linear-gradient(135deg, transparent 0%, hsl(var(--primary) / 0.02) 50%, transparent 100%),
+    var(--background) !important;
+}
+
+/* ============================================
+   THEME STRUCTURE: MODERN
+   Clean lines, asymmetric, contemporary
+   Bauhaus-inspired, geometric, functional
+   ============================================ */
+body[data-theme-structure="modern"] {
+  --radius: 0;
+}
+
+body[data-theme-structure="modern"] h1 {
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  position: relative;
+  padding-left: 1.5rem !important;
+}
+
+body[data-theme-structure="modern"] h1::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: var(--primary);
+}
+
+body[data-theme-structure="modern"] h2 {
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.25em !important;
+  color: var(--primary) !important;
+  margin-bottom: 2rem !important;
+}
+
+body[data-theme-structure="modern"] h3 {
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+
+body[data-theme-structure="modern"] p {
+  font-weight: 400 !important;
+}
+
+body[data-theme-structure="modern"] [data-slot="card"] {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: 2px solid hsl(var(--border)) !important;
+  transition: all 0.2s ease !important;
+  position: relative;
+}
+
+body[data-theme-structure="modern"] [data-slot="card"]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+body[data-theme-structure="modern"] [data-slot="card"]:hover {
+  border-color: var(--primary) !important;
+}
+
+body[data-theme-structure="modern"] [data-slot="card"]:hover::after {
+  width: 100%;
+}
+
+body[data-theme-structure="modern"] button:not([role="radio"]):not([role="checkbox"]):not([data-slot="checkbox"]):not([data-radix-collection-item]) {
+  border-radius: 0 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  font-size: 0.7rem !important;
+  padding: 1rem 1.75rem !important;
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme-structure="modern"] button:not([role="radio"]):not([role="checkbox"]):not([data-slot="checkbox"]):not([data-radix-collection-item])::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: currentColor;
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+}
+
+body[data-theme-structure="modern"] button:not([role="radio"]):not([role="checkbox"]):not([data-slot="checkbox"]):not([data-radix-collection-item]):hover::after {
+  transform: translateX(0);
+}
+
+/* Reset form control buttons (radio, checkbox) to normal styling */
+body[data-theme-structure="modern"] button[role="radio"],
+body[data-theme-structure="modern"] button[role="checkbox"],
+body[data-theme-structure="modern"] button[data-slot="checkbox"],
+body[data-theme-structure="modern"] [data-radix-collection-item] {
+  border-radius: 9999px !important;
+  padding: 0 !important;
+  font-weight: normal !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: inherit !important;
+}
+
+body[data-theme-structure="modern"] button[data-slot="checkbox"] {
+  border-radius: 4px !important;
+}
+
+/* Payment options and terms checkbox - prevent grid styling override */
+body[data-theme-structure="modern"] .payment-options,
+body[data-theme-structure="modern"] .terms-checkbox {
+  background: transparent;
+  padding: 0;
+}
+
+body[data-theme-structure="modern"] .payment-options {
+  gap: 1rem !important;
+}
+
+body[data-theme-structure="modern"] .payment-options > *,
+body[data-theme-structure="modern"] .terms-checkbox > * {
+  background: transparent;
+}
+
+/* Booking confirmation page - reset modern grid styling */
+body[data-theme-structure="modern"] .booking-confirmation-grid,
+body[data-theme-structure="modern"] .booking-form-grid,
+body[data-theme-structure="modern"] .booking-form-stack {
+  background: transparent;
+  padding: 0;
+}
+
+body[data-theme-structure="modern"] .booking-confirmation-grid {
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  body[data-theme-structure="modern"] .booking-confirmation-grid {
+    gap: 2rem;
+  }
+}
+
+body[data-theme-structure="modern"] .booking-form-grid {
+  gap: 1rem;
+}
+
+body[data-theme-structure="modern"] .booking-confirmation-grid > *,
+body[data-theme-structure="modern"] .booking-form-grid > *,
+body[data-theme-structure="modern"] .booking-form-stack > *:not([data-slot="card"]) {
+  background: transparent;
+}
+
+body[data-theme-structure="modern"] section {
+  padding-top: 4rem !important;
+  padding-bottom: 4rem !important;
+  border-bottom: 1px solid hsl(var(--border));
+  position: relative;
+}
+
+body[data-theme-structure="modern"] section:last-of-type {
+  border-bottom: none;
+}
+
+/* Modern Header - Solid, geometric */
+body[data-theme-structure="modern"] header {
+  background: var(--background) !important;
+  border-bottom: 2px solid hsl(var(--border)) !important;
+  backdrop-filter: none !important;
+}
+
+body[data-theme-structure="modern"] header nav a {
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  font-size: 0.7rem !important;
+  position: relative;
+}
+
+body[data-theme-structure="modern"] header nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.2s ease;
+}
+
+body[data-theme-structure="modern"] header nav a:hover::after {
+  width: 100%;
+}
+
+body[data-theme-structure="modern"] header .text-gradient-primary {
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+  color: var(--foreground) !important;
+}
+
+/* Remove curves and gradients */
+body[data-theme-structure="modern"] .rounded-full {
+  border-radius: 0 !important;
+}
+
+body[data-theme-structure="modern"] .rounded-xl,
+body[data-theme-structure="modern"] .rounded-2xl,
+body[data-theme-structure="modern"] .rounded-lg {
+  border-radius: 0 !important;
+}
+
+/* Grid with visible structure */
+body[data-theme-structure="modern"] .grid {
+  gap: 2px !important;
+  background: hsl(var(--border));
+  padding: 2px;
+}
+
+body[data-theme-structure="modern"] .grid > * {
+  background: var(--background);
+}
+
+/* Exception: Calendar and time slot grids need their own styling for selected states */
+body[data-theme-structure="modern"] .calendar-grid,
+body[data-theme-structure="modern"] .time-slots-grid {
+  background: transparent !important;
+  padding: 0 !important;
+  gap: 0.25rem !important;
+}
+
+@media (min-width: 640px) {
+  body[data-theme-structure="modern"] .calendar-grid {
+    gap: 0.5rem !important;
+  }
+  body[data-theme-structure="modern"] .time-slots-grid {
+    gap: 0.75rem !important;
+  }
+}
+
+body[data-theme-structure="modern"] .calendar-grid > *,
+body[data-theme-structure="modern"] .time-slots-grid > * {
+  background: transparent;
+}
+
+/* Contact page - opening hours and map grid */
+body[data-theme-structure="modern"] .contact-hours-grid {
+  background: transparent;
+  padding: 0;
+  gap: 2rem;
+}
+
+body[data-theme-structure="modern"] .contact-hours-grid > * {
+  background: transparent;
+}
+
+/* Category titles - larger and bolder for modern theme */
+body[data-theme-structure="modern"] .category-title {
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em !important;
+  color: var(--foreground) !important;
+  margin-bottom: 0.5rem !important;
+  padding-left: 1rem !important;
+  border-left: 4px solid var(--primary) !important;
+}
+
+/* ============================================
+   THEME STRUCTURE: CLASSIC (default)
+   Traditional elegant salon
+   Warm, inviting, timeless design
+   ============================================ */
+body[data-theme-structure="classic"] {
+  --radius: 1rem;
+}
+
+body[data-theme-structure="classic"] h1 {
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+
+body[data-theme-structure="classic"] h2 {
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+}
+
+body[data-theme-structure="classic"] [data-slot="card"] {
+  border-radius: 1rem !important;
+  box-shadow: 0 10px 40px -10px rgb(0 0 0 / 0.1) !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+  transition: all 0.3s ease !important;
+}
+
+body[data-theme-structure="classic"] [data-slot="card"]:hover {
+  box-shadow: 0 20px 50px -15px rgb(0 0 0 / 0.15) !important;
+  transform: translateY(-4px) !important;
+}
+
+body[data-theme-structure="classic"] button {
+  border-radius: 9999px !important;
+  font-weight: 500 !important;
+  padding: 0.75rem 1.5rem !important;
+  transition: all 0.2s ease !important;
+}
+
+body[data-theme-structure="classic"] button:hover {
+  transform: translateY(-2px) !important;
+}
+
+body[data-theme-structure="classic"] section {
+  padding-top: 4rem !important;
+  padding-bottom: 4rem !important;
+}
+
+@media (min-width: 768px) {
+  body[data-theme-structure="classic"] section {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+  }
+}
+
+/* Classic Header - Transparent with blur */
+body[data-theme-structure="classic"] header {
+  backdrop-filter: blur(12px) !important;
+}
+
+body[data-theme-structure="classic"] header nav a {
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+}
+
+/* Warm gradients */
+body[data-theme-structure="classic"] .bg-gradient-beauty {
+  background: linear-gradient(
+    135deg,
+    var(--background) 0%,
+    hsl(var(--primary) / 0.03) 50%,
+    var(--background) 100%
+  ) !important;
+}

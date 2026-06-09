@@ -1,0 +1,8 @@
+{
+  "mode": "mock",
+  "role": "staff",
+  "loginUrl": "/admin/login",
+  "email": "staff@beautifypro.demo",
+  "password": "beauty-staff-demo",
+  "note": "Optional demo staff account for calendar-focused presentation flows."
+}

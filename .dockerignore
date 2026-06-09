@@ -1,0 +1,10 @@
+.git
+.next
+**/.next
+node_modules
+**/node_modules
+*.tsbuildinfo
+coverage
+**/coverage
+.DS_Store
+*.log

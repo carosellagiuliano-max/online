@@ -1,0 +1,374 @@
+# Appointr - Docker Compose Stack (DEVELOPMENT)
+# Includes: Next.js App + Supabase (Postgres, Auth, Storage, Realtime, Studio)
+#
+# Usage: docker compose -p <customer> -f docker-compose.dev.yml --env-file .env.dev up -d
+# Example: docker compose -p beauty -f docker-compose.dev.yml --env-file .env.dev up -d
+#
+# EXPOSED PORTS for local development:
+# - App:      http://localhost:3000
+# - Supabase: http://localhost:54321
+# - Studio:   http://localhost:54323
+# - Postgres: localhost:54322
+#
+# Internal services (accessible via Docker network):
+# - App:      beauty-app:3000
+# - Supabase: beauty-kong:8000
+# - Studio:   beauty-studio:3000
+
+name: "beauty"
+
+services:
+  # ===========================================
+  # Next.js Application
+  # ===========================================
+  app:
+    build:
+      context: ../..
+      dockerfile: packages/backend/Dockerfile
+      args:
+        - APP_NAME=${APP_NAME:-frontend-schnittwerk}
+        # Browser uses localhost:54321 (baked at build time)
+        - NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321
+        - NEXT_PUBLIC_SUPABASE_ANON_KEY=${ANON_KEY}
+        - SUPABASE_SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
+        - NEXT_PUBLIC_SITE_URL=${SITE_URL:-http://localhost:3000}
+        - NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN:-}
+        # Feature flags (baked at build time)
+        - NEXT_PUBLIC_FEATURE_SHOP_ENABLED=${NEXT_PUBLIC_FEATURE_SHOP_ENABLED:-true}
+        - NEXT_PUBLIC_FEATURE_BOOKING_ENABLED=${NEXT_PUBLIC_FEATURE_BOOKING_ENABLED:-true}
+        - NEXT_PUBLIC_FEATURE_GALLERY_ENABLED=${NEXT_PUBLIC_FEATURE_GALLERY_ENABLED:-true}
+        - NEXT_PUBLIC_FEATURE_NOTIFICATION_TEMPLATES_ENABLED=${NEXT_PUBLIC_FEATURE_NOTIFICATION_TEMPLATES_ENABLED:-true}
+        - NEXT_PUBLIC_FEATURE_FINANCE_ENABLED=${NEXT_PUBLIC_FEATURE_FINANCE_ENABLED:-true}
+        # Theme configuration (baked at build time)
+        - NEXT_PUBLIC_THEME=${NEXT_PUBLIC_THEME:-ocean}
+        - NEXT_PUBLIC_THEME_STRUCTURE=${NEXT_PUBLIC_THEME_STRUCTURE:-classic}
+    container_name: ${CONTAINER_PREFIX:-beauty}-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # App name for entrypoint script
+      - APP_NAME=frontend-schnittwerk
+      # Browser URL (also set at runtime for any dynamic usage)
+      - NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
+      - NEXT_PUBLIC_SITE_URL=${SITE_URL:-http://localhost:3000}
+      # Internal URL for server-side requests (SSR) - reaches Kong via Docker network
+      - SUPABASE_URL_INTERNAL=http://kong:8000
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}
+      # SMTP Configuration
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
+      - SMTP_ADMIN_EMAIL=${SMTP_ADMIN_EMAIL:-}
+      # Feature flags
+      - NEXT_PUBLIC_FEATURE_SHOP_ENABLED=${NEXT_PUBLIC_FEATURE_SHOP_ENABLED:-true}
+      - NEXT_PUBLIC_FEATURE_BOOKING_ENABLED=${NEXT_PUBLIC_FEATURE_BOOKING_ENABLED:-true}
+      - NEXT_PUBLIC_FEATURE_GALLERY_ENABLED=${NEXT_PUBLIC_FEATURE_GALLERY_ENABLED:-true}
+      - NEXT_PUBLIC_FEATURE_NOTIFICATION_TEMPLATES_ENABLED=${NEXT_PUBLIC_FEATURE_NOTIFICATION_TEMPLATES_ENABLED:-true}
+      # Admin User Configuration (created on first startup)
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - ADMIN_FIRST_NAME=${ADMIN_FIRST_NAME:-Admin}
+      - ADMIN_LAST_NAME=${ADMIN_LAST_NAME:-User}
+      # Superadmin (BeautifyPro Support) - can access /admin but invisible in staff/booking
+      - SUPERADMIN_ENABLED=${SUPERADMIN_ENABLED:-false}
+      - SUPERADMIN_EMAIL=${SUPERADMIN_EMAIL:-}
+      - SUPERADMIN_PASSWORD=${SUPERADMIN_PASSWORD:-}
+      # Database connection for admin user creation
+      - DB_HOST=db
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      # Setup Wizard
+      - ENABLE_WIZARD=${ENABLE_WIZARD:-false}
+    depends_on:
+      kong:
+        condition: service_started
+      db:
+        condition: service_healthy
+    volumes:
+      # Mount seed.sql for automatic seeding on first run
+      - ./seed.sql:/app/seed.sql:ro
+      # Mount migrations for automatic migration on startup
+      - ../../packages/backend/supabase/migrations:/app/migrations:ro
+    networks:
+      - appointr-network
+
+  # ===========================================
+  # Supabase Services
+  # ===========================================
+
+  # PostgreSQL Database with Supabase extensions
+  db:
+    image: public.ecr.aws/supabase/postgres:15.8.1.085
+    container_name: ${CONTAINER_PREFIX:-beauty}-db
+    restart: unless-stopped
+    ports:
+      - "54322:5432"
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
+      - -c
+      - log_min_messages=fatal
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      PGPORT: 5432
+      POSTGRES_PORT: 5432
+      PGPASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      SUPABASE_DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PGDATABASE: postgres
+      POSTGRES_DB: postgres
+      JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-token-with-at-least-32-characters-long}
+      JWT_EXP: 3600
+    volumes:
+      - appointr_db_data:/var/lib/postgresql/data
+      - ../../packages/backend/supabase/migrations:/docker-entrypoint-initdb.d/migrations:ro
+      - ../../packages/backend/supabase/set-supabase-passwords.sh:/docker-entrypoint-initdb.d/zzz-set-supabase-passwords.sh:ro
+      # Note: seed.sql is handled by app entrypoint (respects ENABLE_WIZARD)
+    healthcheck:
+      test: pg_isready -U postgres -h localhost
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - appointr-network
+
+  # Kong API Gateway
+  kong:
+    image: public.ecr.aws/supabase/kong:2.8.1
+    container_name: ${CONTAINER_PREFIX:-beauty}-kong
+    restart: unless-stopped
+    ports:
+      - "54321:8000"
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      ANON_KEY: ${ANON_KEY}
+      SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      DASHBOARD_USERNAME: supabase
+      DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD:-this_password_is_insecure_and_should_be_updated}
+    volumes:
+      - ../../packages/backend/supabase/kong.yml:/home/kong/kong.yml.template:ro
+    entrypoint: ["/bin/sh", "-c", "sed 's|$${ANON_KEY}|'\"$$ANON_KEY\"'|g; s|$${SERVICE_ROLE_KEY}|'\"$$SERVICE_ROLE_KEY\"'|g' /home/kong/kong.yml.template > /home/kong/kong.yml && /docker-entrypoint.sh kong docker-start"]
+    depends_on:
+      auth:
+        condition: service_healthy
+    networks:
+      - appointr-network
+
+  # Supabase Auth (GoTrue)
+  auth:
+    image: public.ecr.aws/supabase/gotrue:v2.183.0
+    container_name: ${CONTAINER_PREFIX:-beauty}-auth
+    restart: unless-stopped
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: http://localhost:54321
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD:-postgres}@db:5432/postgres
+      GOTRUE_SITE_URL: ${SITE_URL:-http://localhost:3000}
+      GOTRUE_URI_ALLOW_LIST: ${ADDITIONAL_REDIRECT_URLS:-}
+      GOTRUE_DISABLE_SIGNUP: ${DISABLE_SIGNUP:-false}
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: ${JWT_EXPIRY:-3600}
+      GOTRUE_JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-token-with-at-least-32-characters-long}
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: ${ENABLE_EMAIL_SIGNUP:-true}
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: ${ENABLE_ANONYMOUS_USERS:-false}
+      GOTRUE_MAILER_AUTOCONFIRM: ${ENABLE_EMAIL_AUTOCONFIRM:-true}
+      # SMTP Configuration
+      GOTRUE_SMTP_HOST: ${SMTP_HOST:-}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT:-587}
+      GOTRUE_SMTP_USER: ${SMTP_USER:-}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:-}
+      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-Appointr}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - appointr-network
+
+  # PostgREST - RESTful API
+  rest:
+    image: public.ecr.aws/supabase/postgrest:v13.0.7
+    container_name: ${CONTAINER_PREFIX:-beauty}-rest
+    restart: unless-stopped
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD:-postgres}@db:5432/postgres
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-token-with-at-least-32-characters-long}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-token-with-at-least-32-characters-long}
+      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY:-3600}
+    command: postgrest
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - appointr-network
+
+  # Realtime - Postgres Changes via WebSocket
+  realtime:
+    image: public.ecr.aws/supabase/realtime:v2.65.3
+    container_name: ${CONTAINER_PREFIX:-beauty}-realtime
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      APP_NAME: realtime
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: supabase_admin
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      DB_NAME: postgres
+      DB_AFTER_CONNECT_QUERY: 'SET search_path TO _realtime'
+      DB_ENC_KEY: supabaserealtime
+      API_JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-token-with-at-least-32-characters-long}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq}
+      ERL_AFLAGS: -proto_dist inet_tcp
+      DNS_NODES: "''"
+      RLIMIT_NOFILE: 10000
+      TENANT_EXTERNAL_URL: http://localhost:54321
+      REPLICATION_MODE: RLS
+      REPLICATION_POLL_INTERVAL: 100
+      SECURE_CHANNELS: "true"
+      SLOT_NAME: realtime_rls
+      TEMPORARY_SLOT: "true"
+    command: sh -c "/app/bin/migrate && /app/bin/realtime eval 'Realtime.Release.seeds(Realtime.Repo)' && /app/bin/server"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - appointr-network
+
+  # Storage API
+  storage:
+    image: public.ecr.aws/supabase/storage-api:v1.32.0
+    container_name: ${CONTAINER_PREFIX:-beauty}-storage
+    restart: unless-stopped
+    environment:
+      ANON_KEY: ${ANON_KEY}
+      SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      POSTGREST_URL: http://rest:3000
+      PGRST_JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-token-with-at-least-32-characters-long}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD:-postgres}@db:5432/postgres
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      REGION: local
+      GLOBAL_S3_BUCKET: stub
+      ENABLE_IMAGE_TRANSFORMATION: "true"
+      IMGPROXY_URL: http://imgproxy:8080
+    volumes:
+      - appointr_storage_data:/var/lib/storage
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      db:
+        condition: service_healthy
+      rest:
+        condition: service_started
+      imgproxy:
+        condition: service_started
+    networks:
+      - appointr-network
+
+  # Image Transformation
+  imgproxy:
+    image: public.ecr.aws/supabase/imgproxy:v3.8.0
+    container_name: ${CONTAINER_PREFIX:-beauty}-imgproxy
+    restart: unless-stopped
+    environment:
+      IMGPROXY_BIND: :8080
+      IMGPROXY_LOCAL_FILESYSTEM_ROOT: /
+      IMGPROXY_USE_ETAG: "true"
+      IMGPROXY_ENABLE_WEBP_DETECTION: "true"
+    volumes:
+      - appointr_storage_data:/var/lib/storage:ro
+    healthcheck:
+      test: ["CMD", "imgproxy", "health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - appointr-network
+
+  # Postgres Meta (for Studio)
+  meta:
+    image: public.ecr.aws/supabase/postgres-meta:v0.93.1
+    container_name: ${CONTAINER_PREFIX:-beauty}-meta
+    restart: unless-stopped
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: db
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: postgres
+      PG_META_DB_USER: supabase_admin
+      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - appointr-network
+
+  # Supabase Studio (Admin UI)
+  studio:
+    image: public.ecr.aws/supabase/studio:2025.11.25-sha-8de52c4
+    container_name: ${CONTAINER_PREFIX:-beauty}-studio
+    restart: unless-stopped
+    ports:
+      - "54323:3000"
+    environment:
+      STUDIO_PG_META_URL: http://meta:8080
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      DEFAULT_ORGANIZATION_NAME: ${STUDIO_ORG_NAME:-Appointr}
+      DEFAULT_PROJECT_NAME: ${STUDIO_PROJECT_NAME:-${CONTAINER_PREFIX:-beauty}}
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_PUBLIC_URL: http://localhost:54321
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      AUTH_JWT_SECRET: ${JWT_SECRET:-super-secret-jwt-token-with-at-least-32-characters-long}
+      LOGFLARE_API_KEY: ""
+      LOGFLARE_URL: http://localhost:4000
+      NEXT_PUBLIC_ENABLE_LOGS: false
+      NEXT_ANALYTICS_BACKEND_PROVIDER: postgres
+    depends_on:
+      db:
+        condition: service_healthy
+      meta:
+        condition: service_started
+    networks:
+      - appointr-network
+
+volumes:
+  appointr_db_data:
+    driver: local
+  appointr_storage_data:
+    driver: local
+
+networks:
+  appointr-network:
+    driver: bridge

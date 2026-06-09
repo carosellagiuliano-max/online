@@ -1,0 +1,1344 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../../../../packages/backend/src/styles/theme-structures.css";
+
+/* Include backend package source files for Tailwind scanning */
+@source "../../../../packages/backend/src/**/*.{ts,tsx}";
+@source "../../../src/**/*.{ts,tsx}";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================
+   BeautifyPRO DESIGN TOKENS
+   Luxury Beauty Salon - Elegant, Refined, Modern
+   Rose Gold meets Sophisticated Neutrals
+   ============================================ */
+
+@theme inline {
+  /* Core colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Component colors */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* BeautifyPRO Brand Colors */
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-rose: var(--rose);
+  --color-rose-light: var(--rose-light);
+  --color-rose-dark: var(--rose-dark);
+  --color-cream: var(--cream);
+  --color-charcoal: var(--charcoal);
+
+  /* Chart colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar colors */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Border radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+}
+
+:root {
+  /* Base radius - More rounded for softness */
+  --radius: 0.875rem;
+
+  /* Theme colors are now injected dynamically via ThemeStyles component */
+  /* Configure theme via NEXT_PUBLIC_THEME in .env / .env.dev */
+  /* Available themes: beauty, ocean, forest, midnight */
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Smooth scrolling with performance optimization */
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Elegant selection color */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+
+  /* Focus visible styles - More elegant */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/30;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+}
+
+/* ============================================
+   TYPOGRAPHY - Refined & Elegant
+   ============================================ */
+
+@layer base {
+  h1 {
+    @apply text-4xl font-bold tracking-tight lg:text-5xl;
+    letter-spacing: -0.025em;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold tracking-tight;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold tracking-tight;
+    letter-spacing: -0.015em;
+  }
+
+  h4 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+
+  h5 {
+    @apply text-lg font-semibold;
+  }
+
+  p {
+    @apply leading-7;
+  }
+
+  /* Elegant link styling */
+  a:not([class]) {
+    @apply text-primary underline-offset-4 hover:underline transition-colors duration-200;
+  }
+
+  /* Small text helper */
+  small {
+    @apply text-sm text-muted-foreground;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+@layer utilities {
+  /* Glass effect - Refined glassmorphism */
+  .glass {
+    @apply bg-background/70 backdrop-blur-xl border border-border/40;
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 0.02),
+      0 4px 16px oklch(0 0 0 / 0.04);
+  }
+
+  .glass-strong {
+    @apply bg-background/85 backdrop-blur-2xl border border-border/50;
+    box-shadow:
+      0 2px 4px oklch(0 0 0 / 0.03),
+      0 8px 24px oklch(0 0 0 / 0.06);
+  }
+
+  /* Gold gradient text */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold-dark via-gold to-gold-light bg-clip-text text-transparent;
+  }
+
+  /* Rose gradient text */
+  .text-gradient-rose {
+    @apply bg-gradient-to-r from-rose-dark via-rose to-rose-light bg-clip-text text-transparent;
+  }
+
+  /* Primary gradient text */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Elegant shadows - Multi-layered for depth */
+  .shadow-elegant {
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 0.02),
+      0 2px 4px oklch(0 0 0 / 0.02),
+      0 4px 8px oklch(0 0 0 / 0.03),
+      0 8px 16px oklch(0 0 0 / 0.04);
+  }
+
+  .shadow-elegant-lg {
+    box-shadow:
+      0 2px 4px oklch(0 0 0 / 0.02),
+      0 4px 8px oklch(0 0 0 / 0.03),
+      0 8px 16px oklch(0 0 0 / 0.04),
+      0 16px 32px oklch(0 0 0 / 0.06);
+  }
+
+  /* Glow effects */
+  .shadow-glow {
+    box-shadow:
+      0 0 20px color-mix(in oklch, var(--primary) 15%, transparent),
+      0 0 40px color-mix(in oklch, var(--primary) 8%, transparent);
+  }
+
+  .shadow-glow-sm {
+    box-shadow:
+      0 0 12px color-mix(in oklch, var(--primary) 12%, transparent),
+      0 0 24px color-mix(in oklch, var(--primary) 6%, transparent);
+  }
+
+  /* Container utilities */
+  .container-narrow {
+    @apply mx-auto max-w-4xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .section-padding-sm {
+    @apply py-12 md:py-16;
+  }
+
+  /* Hide scrollbar but allow scrolling */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-radial {
+    background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
+  }
+
+  .bg-gradient-beauty {
+    background: linear-gradient(
+      135deg,
+      var(--background) 0%,
+      color-mix(in oklch, var(--primary) 4%, var(--background)) 50%,
+      var(--background) 100%
+    );
+  }
+}
+
+/* ============================================
+   ANIMATIONS - Smooth & Elegant
+   ============================================ */
+
+@layer utilities {
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slide up animation */
+  .animate-slide-up {
+    animation: slide-up 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scale in animation */
+  .animate-scale-in {
+    animation: scale-in 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Float animation for decorative elements */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Shimmer effect for loading states */
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--muted) 0%,
+      var(--background) 50%,
+      var(--muted) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Pulse glow */
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 12px color-mix(in oklch, var(--primary) 20%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 24px color-mix(in oklch, var(--primary) 35%, transparent);
+    }
+  }
+}
+
+/* ============================================
+   COMPONENT STYLES
+   ============================================ */
+
+@layer components {
+  /* Button hover glow effect */
+  .btn-glow {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .btn-glow:hover {
+    box-shadow:
+      0 0 20px color-mix(in oklch, var(--primary) 25%, transparent),
+      0 4px 12px oklch(0 0 0 / 0.1);
+    transform: translateY(-1px);
+  }
+
+  .btn-glow:active {
+    transform: translateY(0);
+  }
+
+  /* Card hover lift effect */
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .card-hover:hover {
+    @apply -translate-y-1;
+    box-shadow:
+      0 4px 8px oklch(0 0 0 / 0.04),
+      0 8px 16px oklch(0 0 0 / 0.06),
+      0 16px 32px oklch(0 0 0 / 0.08);
+  }
+
+  /* Elegant card with border glow on hover */
+  .card-elegant {
+    @apply bg-card border border-border/50 rounded-xl transition-all duration-300;
+    box-shadow:
+      0 1px 3px oklch(0 0 0 / 0.02),
+      0 4px 12px oklch(0 0 0 / 0.04);
+  }
+
+  .card-elegant:hover {
+    @apply border-primary/20;
+    box-shadow:
+      0 4px 8px oklch(0 0 0 / 0.04),
+      0 8px 24px oklch(0 0 0 / 0.06),
+      0 0 0 1px color-mix(in oklch, var(--primary) 8%, transparent);
+  }
+
+  /* Feature card with icon */
+  .feature-card {
+    @apply p-6 rounded-2xl bg-gradient-to-br from-card to-muted/30 border border-border/40;
+    @apply transition-all duration-300;
+  }
+
+  .feature-card:hover {
+    @apply border-primary/30;
+    box-shadow:
+      0 8px 24px oklch(0 0 0 / 0.06),
+      0 0 0 1px color-mix(in oklch, var(--primary) 10%, transparent);
+    transform: translateY(-2px);
+  }
+
+  /* Input elegant styling */
+  .input-elegant {
+    @apply bg-background/50 border-border/60 rounded-xl;
+    @apply focus:border-primary/50 focus:ring-2 focus:ring-primary/20;
+    @apply transition-all duration-200;
+  }
+
+  /* Badge styling */
+  .badge-elegant {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full;
+    @apply text-xs font-medium tracking-wide;
+    @apply bg-primary/10 text-primary;
+  }
+
+  /* Divider with gradient */
+  .divider-gradient {
+    @apply h-px w-full;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--border) 20%,
+      var(--border) 80%,
+      transparent
+    );
+  }
+
+  /* Section header styling */
+  .section-header {
+    @apply text-center max-w-3xl mx-auto mb-12;
+  }
+
+  .section-header p:first-child {
+    @apply text-primary text-sm font-medium uppercase tracking-wider mb-2;
+  }
+
+  .section-header h2 {
+    @apply text-3xl md:text-4xl font-bold mb-4;
+  }
+
+  .section-header p:last-child:not(:first-child) {
+    @apply text-lg text-muted-foreground;
+  }
+}
+
+/* ============================================
+   FULLCALENDAR STYLES
+   ============================================ */
+
+/* FullCalendar Base */
+.fc {
+  --fc-border-color: var(--border);
+  --fc-button-bg-color: transparent;
+  --fc-button-border-color: var(--border);
+  --fc-button-text-color: var(--foreground);
+  --fc-button-hover-bg-color: var(--accent);
+  --fc-button-hover-border-color: var(--border);
+  --fc-button-active-bg-color: var(--primary);
+  --fc-button-active-border-color: var(--primary);
+  --fc-today-bg-color: color-mix(in oklch, var(--primary) 6%, transparent);
+  --fc-now-indicator-color: var(--primary);
+  --fc-event-border-color: transparent;
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: var(--muted);
+  --fc-list-event-hover-bg-color: var(--accent);
+}
+
+.fc .fc-toolbar-title {
+  @apply text-xl font-semibold;
+}
+
+.fc .fc-button {
+  @apply rounded-lg font-medium text-sm px-4 py-2 transition-all duration-200;
+}
+
+.fc .fc-button:focus {
+  @apply ring-2 ring-ring ring-offset-2;
+  box-shadow: none;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  @apply bg-primary text-primary-foreground;
+}
+
+.fc .fc-button-group > .fc-button {
+  @apply first:rounded-l-lg last:rounded-r-lg;
+}
+
+/* Calendar Header */
+.fc .fc-col-header-cell {
+  @apply py-3 font-medium text-muted-foreground;
+}
+
+.fc .fc-col-header-cell-cushion {
+  @apply text-sm;
+}
+
+/* Time Grid */
+.fc .fc-timegrid-slot {
+  height: 3rem;
+}
+
+.fc .fc-timegrid-slot-label {
+  @apply text-xs text-muted-foreground;
+}
+
+.fc .fc-timegrid-axis-cushion {
+  @apply text-xs text-muted-foreground;
+}
+
+/* Events */
+.fc-event {
+  @apply rounded-lg border-0 cursor-pointer transition-all duration-200;
+}
+
+.fc-event:hover {
+  @apply opacity-90;
+  transform: scale(1.02);
+}
+
+.fc-event-main {
+  @apply p-1.5;
+}
+
+.fc-daygrid-event {
+  @apply rounded-lg;
+}
+
+/* Day Grid */
+.fc .fc-daygrid-day {
+  @apply transition-colors duration-200;
+}
+
+.fc .fc-daygrid-day:hover {
+  @apply bg-accent/50;
+}
+
+.fc .fc-daygrid-day-number {
+  @apply text-sm p-2;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  @apply bg-primary text-primary-foreground rounded-full w-7 h-7 flex items-center justify-center;
+}
+
+/* Scrollbar styling */
+.fc-scroller {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.fc-scroller::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.fc-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+
+/* Now indicator */
+.fc .fc-timegrid-now-indicator-line {
+  @apply border-primary;
+  border-width: 2px;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+  @apply border-primary;
+}
+
+/* Selection highlight */
+.fc .fc-highlight {
+  @apply bg-primary/15;
+}
+
+/* List View */
+.fc .fc-list-day-cushion {
+  @apply bg-muted font-medium;
+}
+
+.fc .fc-list-event:hover td {
+  @apply bg-accent;
+}
+
+.fc .fc-list-event-dot {
+  @apply border-0;
+}
+
+/* Dark mode adjustments */
+.dark .fc {
+  --fc-today-bg-color: color-mix(in oklch, var(--primary) 8%, transparent);
+}
+
+.dark .fc-event {
+  @apply text-white;
+}
+
+/* ============================================
+   THEME-AWARE SECTION BACKGROUNDS
+   ============================================ */
+
+@layer utilities {
+  /* Hero Section Background - Dark themed hero with gradient */
+  .section-hero-bg {
+    background: linear-gradient(
+      135deg,
+      var(--charcoal) 0%,
+      color-mix(in oklch, var(--charcoal) 95%, transparent) 50%,
+      color-mix(in oklch, var(--charcoal) 90%, transparent) 100%
+    );
+  }
+
+  /* Hero pattern overlay */
+  .section-hero-pattern {
+    @apply absolute inset-0 opacity-5;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Accent Section Background - Light themed with gradient */
+  .section-accent-bg {
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--gold-light) 30%, var(--background)) 0%,
+      color-mix(in oklch, var(--rose-light) 20%, var(--background)) 50%,
+      color-mix(in oklch, var(--primary) 10%, var(--background)) 100%
+    );
+  }
+
+  .dark .section-accent-bg {
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--gold) 15%, var(--background)) 0%,
+      color-mix(in oklch, var(--rose) 10%, var(--background)) 50%,
+      color-mix(in oklch, var(--primary) 8%, var(--background)) 100%
+    );
+  }
+
+  /* Decorative Blob - Primary (top-left positioned) */
+  .section-blob-primary {
+    @apply absolute w-72 h-72 rounded-full blur-3xl;
+    background: color-mix(in oklch, var(--gold) 40%, transparent);
+  }
+
+  .dark .section-blob-primary {
+    background: color-mix(in oklch, var(--gold) 20%, transparent);
+  }
+
+  /* Decorative Blob - Secondary (bottom-right positioned) */
+  .section-blob-secondary {
+    @apply absolute w-96 h-96 rounded-full blur-3xl;
+    background: color-mix(in oklch, var(--rose) 30%, transparent);
+  }
+
+  .dark .section-blob-secondary {
+    background: color-mix(in oklch, var(--rose) 15%, transparent);
+  }
+
+  /* Accent section text color (for labels/tags) */
+  .section-accent-label {
+    color: color-mix(in oklch, var(--gold-dark) 100%, var(--foreground));
+  }
+
+  .dark .section-accent-label {
+    color: color-mix(in oklch, var(--gold) 80%, var(--foreground));
+  }
+
+  /* Accent section card styling */
+  .section-accent-card {
+    @apply bg-white/90 dark:bg-card/90 backdrop-blur-sm;
+    @apply shadow-lg transition-all duration-300;
+    border-color: color-mix(in oklch, var(--gold) 30%, transparent);
+    box-shadow:
+      0 4px 12px color-mix(in oklch, var(--gold) 15%, transparent),
+      0 0 0 1px color-mix(in oklch, var(--gold) 10%, transparent);
+  }
+
+  .dark .section-accent-card {
+    border-color: color-mix(in oklch, var(--gold) 20%, transparent);
+    box-shadow: none;
+  }
+
+  .section-accent-card:hover {
+    box-shadow:
+      0 8px 24px color-mix(in oklch, var(--gold) 25%, transparent),
+      0 0 0 1px color-mix(in oklch, var(--gold) 15%, transparent);
+  }
+
+  .dark .section-accent-card:hover {
+    box-shadow: 0 8px 24px color-mix(in oklch, var(--gold) 15%, transparent);
+  }
+
+  /* Accent section price/highlight text */
+  .section-accent-highlight {
+    color: color-mix(in oklch, var(--gold-dark) 100%, var(--foreground));
+  }
+
+  .dark .section-accent-highlight {
+    color: var(--gold);
+  }
+
+  /* Accent section button variant */
+  .btn-accent-outline {
+    @apply transition-all duration-200;
+    border-color: color-mix(in oklch, var(--gold) 60%, transparent);
+    color: color-mix(in oklch, var(--gold-dark) 100%, var(--foreground));
+  }
+
+  .btn-accent-outline:hover {
+    border-color: var(--gold);
+    background: color-mix(in oklch, var(--gold) 10%, transparent);
+  }
+
+  .dark .btn-accent-outline {
+    border-color: color-mix(in oklch, var(--gold) 40%, transparent);
+    color: var(--gold-light);
+  }
+
+  .dark .btn-accent-outline:hover {
+    border-color: var(--gold);
+    background: color-mix(in oklch, var(--gold) 15%, transparent);
+  }
+}
+
+/* ============================================
+   SPECIAL PAGE STYLES
+   ============================================ */
+
+/* Hero section styling */
+.hero-gradient {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, color-mix(in oklch, var(--primary) 8%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, color-mix(in oklch, var(--rose) 5%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 50%, color-mix(in oklch, var(--gold) 5%, transparent), transparent);
+}
+
+.dark .hero-gradient {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, color-mix(in oklch, var(--primary) 12%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, color-mix(in oklch, var(--rose) 8%, transparent), transparent);
+}
+
+/* Product card image hover zoom */
+.product-image-hover {
+  @apply overflow-hidden;
+}
+
+.product-image-hover img {
+  @apply transition-transform duration-500 ease-out;
+}
+
+.product-image-hover:hover img {
+  transform: scale(1.05);
+}
+
+/* Team member card */
+.team-card {
+  @apply relative overflow-hidden rounded-2xl;
+}
+
+.team-card::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent;
+  @apply opacity-0 transition-opacity duration-300;
+  z-index: 1;
+}
+
+.team-card:hover::before {
+  @apply opacity-100;
+}
+
+/* Admin sidebar active state */
+.admin-nav-active {
+  @apply bg-primary/10 text-primary border-r-2 border-primary;
+}
+
+/* Form styling enhancements */
+.form-section {
+  @apply space-y-6 p-6 rounded-xl bg-card border border-border/50;
+}
+
+.form-section-title {
+  @apply text-lg font-semibold mb-4 pb-3 border-b border-border/50;
+}
+
+/* ============================================
+   FOOTER THEME OVERRIDES
+   ============================================ */
+
+/* Minimal theme - ultra light footer */
+body[data-theme-structure="minimal"] footer {
+  background: transparent !important;
+  border-top: 1px solid hsl(var(--border) / 0.2) !important;
+}
+
+body[data-theme-structure="minimal"] footer h2,
+body[data-theme-structure="minimal"] footer h3 {
+  font-weight: 300 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+body[data-theme-structure="minimal"] footer a {
+  font-weight: 300 !important;
+}
+
+/* Bold theme - dark dramatic footer */
+body[data-theme-structure="bold"] footer {
+  background: var(--charcoal) !important;
+  color: white !important;
+  border-top: none !important;
+}
+
+body[data-theme-structure="bold"] footer h2,
+body[data-theme-structure="bold"] footer h3 {
+  color: white !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+}
+
+body[data-theme-structure="bold"] footer p,
+body[data-theme-structure="bold"] footer span,
+body[data-theme-structure="bold"] footer a {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+body[data-theme-structure="bold"] footer a:hover {
+  color: white !important;
+}
+
+body[data-theme-structure="bold"] footer button {
+  background: white !important;
+  color: var(--charcoal) !important;
+}
+
+/* Elegant theme - refined footer */
+body[data-theme-structure="elegant"] footer {
+  border-top: 1px solid hsl(var(--border) / 0.1) !important;
+}
+
+body[data-theme-structure="elegant"] footer h2,
+body[data-theme-structure="elegant"] footer h3 {
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+}
+
+body[data-theme-structure="elegant"] footer::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin-bottom: -1px;
+}
+
+/* Modern theme - grid-based footer */
+body[data-theme-structure="modern"] footer {
+  background: var(--background) !important;
+  border-top: 2px solid hsl(var(--border)) !important;
+}
+
+body[data-theme-structure="modern"] footer h2,
+body[data-theme-structure="modern"] footer h3 {
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  font-size: 0.7rem !important;
+}
+
+body[data-theme-structure="modern"] footer a {
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.75rem !important;
+}
+
+/* Classic theme - warm inviting footer */
+body[data-theme-structure="classic"] footer {
+  background: linear-gradient(180deg, var(--card) 0%, hsl(var(--muted) / 0.3) 100%) !important;
+}
+
+/* ============================================
+   SECTION HEADER THEME OVERRIDES
+   ============================================ */
+
+/* Minimal - centered, understated */
+body[data-theme-structure="minimal"] .section-header,
+body[data-theme-structure="minimal"] .text-center.mb-12 {
+  margin-bottom: 3rem !important;
+}
+
+body[data-theme-structure="minimal"] .text-center p.text-primary {
+  font-size: 0.65rem !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 300 !important;
+}
+
+/* Bold - large, impactful headers */
+body[data-theme-structure="bold"] .section-header,
+body[data-theme-structure="bold"] .text-center.mb-12 {
+  margin-bottom: 4rem !important;
+}
+
+body[data-theme-structure="bold"] .text-center h2 {
+  font-size: 3rem !important;
+}
+
+@media (min-width: 768px) {
+  body[data-theme-structure="bold"] .text-center h2 {
+    font-size: 4rem !important;
+  }
+}
+
+/* Elegant - decorative elements */
+body[data-theme-structure="elegant"] .text-center p.text-primary {
+  font-style: italic !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+}
+
+/* Modern - structured labels */
+body[data-theme-structure="modern"] .text-center p.text-primary {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  display: inline-block !important;
+  padding: 0.25rem 0.75rem !important;
+  font-size: 0.65rem !important;
+  letter-spacing: 0.2em !important;
+}
+
+/* ============================================
+   CONTAINER WIDTH OVERRIDES
+   ============================================ */
+
+/* Minimal uses narrow containers */
+body[data-theme-structure="minimal"] .container-wide {
+  max-width: 56rem !important;
+}
+
+/* Bold uses full-width */
+body[data-theme-structure="bold"] .container-wide {
+  max-width: 90rem !important;
+}
+
+/* ============================================
+   PAGE BACKGROUND OVERRIDES
+   ============================================ */
+
+/* Minimal - pure white/bg, no decorations */
+body[data-theme-structure="minimal"] {
+  background: var(--background) !important;
+}
+
+/* Bold - subtle dark gradient */
+body[data-theme-structure="bold"] .bg-gradient-beauty {
+  background: linear-gradient(
+    180deg,
+    var(--background) 0%,
+    hsl(var(--primary) / 0.03) 30%,
+    var(--background) 100%
+  ) !important;
+}
+
+/* Elegant - subtle warm tint */
+body[data-theme-structure="elegant"] {
+  background: linear-gradient(
+    180deg,
+    var(--background) 0%,
+    hsl(var(--gold) / 0.02) 50%,
+    var(--background) 100%
+  ) !important;
+}
+
+/* Modern - clean flat */
+body[data-theme-structure="modern"] {
+  background: var(--background) !important;
+}
+
+body[data-theme-structure="modern"] .bg-gradient-beauty {
+  background: var(--background) !important;
+}
+
+/* ============================================
+   INPUT FIELD OVERRIDES
+   ============================================ */
+
+body[data-theme-structure="minimal"] input,
+body[data-theme-structure="minimal"] textarea,
+body[data-theme-structure="minimal"] select {
+  border-radius: 0 !important;
+  border-width: 0 0 1px 0 !important;
+  background: transparent !important;
+}
+
+body[data-theme-structure="bold"] input,
+body[data-theme-structure="bold"] textarea,
+body[data-theme-structure="bold"] select {
+  border-radius: 1rem !important;
+  padding: 1rem 1.25rem !important;
+}
+
+body[data-theme-structure="elegant"] input,
+body[data-theme-structure="elegant"] textarea,
+body[data-theme-structure="elegant"] select {
+  border-radius: 0.25rem !important;
+  border-color: hsl(var(--border) / 0.3) !important;
+}
+
+body[data-theme-structure="modern"] input,
+body[data-theme-structure="modern"] textarea,
+body[data-theme-structure="modern"] select {
+  border-radius: 0 !important;
+  border-width: 2px !important;
+}
+
+/* ============================================
+   CTA SECTION OVERRIDES
+   ============================================ */
+
+/* Bold - larger, more dramatic CTA */
+body[data-theme-structure="bold"] .py-20.bg-charcoal {
+  padding-top: 8rem !important;
+  padding-bottom: 8rem !important;
+}
+
+body[data-theme-structure="bold"] .py-20.bg-charcoal h2 {
+  font-size: 3rem !important;
+}
+
+@media (min-width: 768px) {
+  body[data-theme-structure="bold"] .py-20.bg-charcoal h2 {
+    font-size: 4rem !important;
+  }
+}
+
+/* Minimal - subtle CTA */
+body[data-theme-structure="minimal"] .py-20.bg-charcoal {
+  background: hsl(var(--muted)) !important;
+  color: var(--foreground) !important;
+  padding-top: 4rem !important;
+  padding-bottom: 4rem !important;
+}
+
+body[data-theme-structure="minimal"] .py-20.bg-charcoal h2 {
+  font-size: 1.5rem !important;
+  color: var(--foreground) !important;
+}
+
+body[data-theme-structure="minimal"] .py-20.bg-charcoal p {
+  color: var(--muted-foreground) !important;
+}
+
+/* Elegant - refined CTA */
+body[data-theme-structure="elegant"] .py-20.bg-charcoal {
+  background: linear-gradient(135deg, var(--charcoal) 0%, hsl(var(--primary) / 0.8) 100%) !important;
+}
+
+body[data-theme-structure="elegant"] .py-20.bg-charcoal h2 {
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-style: italic !important;
+  font-weight: 300 !important;
+}
+
+/* Modern - bordered CTA */
+body[data-theme-structure="modern"] .py-20.bg-charcoal {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  border-top: 4px solid var(--primary) !important;
+  border-bottom: 4px solid var(--primary) !important;
+}
+
+body[data-theme-structure="modern"] .py-20.bg-charcoal h2 {
+  color: var(--foreground) !important;
+}
+
+body[data-theme-structure="modern"] .py-20.bg-charcoal p {
+  color: var(--muted-foreground) !important;
+}
+
+/* ============================================
+   LINK STYLING OVERRIDES
+   ============================================ */
+
+body[data-theme-structure="minimal"] a {
+  text-decoration: none !important;
+}
+
+body[data-theme-structure="minimal"] a:hover {
+  text-decoration: underline !important;
+}
+
+body[data-theme-structure="modern"] a {
+  position: relative;
+}
+
+/* ============================================
+   ICON STYLING OVERRIDES
+   ============================================ */
+
+body[data-theme-structure="minimal"] .lucide {
+  stroke-width: 1 !important;
+}
+
+body[data-theme-structure="bold"] .lucide {
+  stroke-width: 2.5 !important;
+}
+
+/* ============================================
+   BADGE STYLING OVERRIDES
+   ============================================ */
+
+body[data-theme-structure="minimal"] [data-slot="badge"] {
+  border-radius: 0 !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  font-size: 0.6rem !important;
+}
+
+body[data-theme-structure="bold"] [data-slot="badge"] {
+  border-radius: 9999px !important;
+  font-weight: 700 !important;
+  padding: 0.5rem 1rem !important;
+}
+
+body[data-theme-structure="elegant"] [data-slot="badge"] {
+  border-radius: 0.25rem !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+}
+
+body[data-theme-structure="modern"] [data-slot="badge"] {
+  border-radius: 0 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* ============================================
+   PAGE TITLE SECTION OVERRIDES
+   ============================================ */
+
+/* Minimal - very understated */
+body[data-theme-structure="minimal"] .py-12 > section:first-child .text-center {
+  max-width: 600px !important;
+}
+
+body[data-theme-structure="minimal"] .py-12 > section:first-child p.text-lg {
+  font-weight: 300 !important;
+  font-size: 1rem !important;
+}
+
+/* Bold - dramatic page headers */
+body[data-theme-structure="bold"] .py-12 > section:first-child {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+body[data-theme-structure="bold"] .py-12 > section:first-child h1 {
+  font-size: 4rem !important;
+}
+
+@media (min-width: 768px) {
+  body[data-theme-structure="bold"] .py-12 > section:first-child h1 {
+    font-size: 5rem !important;
+  }
+}
+
+/* Elegant - centered with decorations */
+body[data-theme-structure="elegant"] .py-12 > section:first-child h1::after {
+  content: '';
+  display: block;
+  width: 6rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 1.5rem auto 0;
+}
+
+/* Modern - left-aligned with accent */
+body[data-theme-structure="modern"] .py-12 > section:first-child .text-center {
+  text-align: left !important;
+}
+
+body[data-theme-structure="modern"] .py-12 > section:first-child .mx-auto {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* ============================================
+   GRID LAYOUT OVERRIDES (except modern which has special handling)
+   ============================================ */
+
+body[data-theme-structure="minimal"] .grid.gap-4 {
+  gap: 1px !important;
+}
+
+body[data-theme-structure="bold"] .grid.gap-4 {
+  gap: 1.5rem !important;
+}
+
+body[data-theme-structure="elegant"] .grid.gap-4 {
+  gap: 1.25rem !important;
+}
+
+/* ============================================
+   IMAGE AND MEDIA OVERRIDES
+   ============================================ */
+
+body[data-theme-structure="minimal"] img {
+  filter: grayscale(100%) !important;
+  transition: filter 0.5s ease !important;
+}
+
+body[data-theme-structure="minimal"] img:hover,
+body[data-theme-structure="minimal"] *:hover > img {
+  filter: grayscale(0%) !important;
+}
+
+body[data-theme-structure="bold"] img {
+  border-radius: 1rem !important;
+}
+
+body[data-theme-structure="elegant"] img {
+  border-radius: 0.25rem !important;
+}
+
+body[data-theme-structure="modern"] img {
+  border-radius: 0 !important;
+}
+
+/* ============================================
+   LOADING/SKELETON STATES
+   ============================================ */
+
+body[data-theme-structure="minimal"] .animate-pulse {
+  animation-duration: 2s !important;
+}
+
+body[data-theme-structure="bold"] .animate-pulse {
+  animation-duration: 0.8s !important;
+}
+
+/* ============================================
+   PRICE DISPLAY OVERRIDES
+   ============================================ */
+
+body[data-theme-structure="minimal"] .text-primary.font-bold,
+body[data-theme-structure="minimal"] .text-xl.font-bold.text-primary {
+  font-weight: 300 !important;
+  font-size: 1rem !important;
+}
+
+body[data-theme-structure="bold"] .text-primary.font-bold,
+body[data-theme-structure="bold"] .text-xl.font-bold.text-primary {
+  font-weight: 900 !important;
+  font-size: 1.5rem !important;
+}
+
+body[data-theme-structure="elegant"] .text-primary.font-bold,
+body[data-theme-structure="elegant"] .text-xl.font-bold.text-primary {
+  font-style: italic !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+}
+
+body[data-theme-structure="modern"] .text-primary.font-bold,
+body[data-theme-structure="modern"] .text-xl.font-bold.text-primary {
+  font-weight: 700 !important;
+  font-family: var(--font-sans) !important;
+}

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rose Gold Classic - Theme Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       BeautifyPRO COLOR THEME
+       Rose Gold & Cream - Luxury Salon
+       ======================================== */
+    :root {
+      --gold: #C9A86C;
+      --gold-light: #E5D4B3;
+      --gold-dark: #A08050;
+      --rose: #D4A5A5;
+      --rose-light: #F0DEDE;
+      --rose-dark: #B07575;
+      --cream: #FAF9F7;
+      --charcoal: #1C1917;
+
+      --background: #FDFCFB;
+      --foreground: #1C1917;
+      --card: #FFFFFF;
+      --card-foreground: #1C1917;
+      --primary: #B8860B;
+      --primary-foreground: #FDFCFB;
+      --secondary: #F5E6E6;
+      --secondary-foreground: #3D3D3D;
+      --muted: #F5F5F3;
+      --muted-foreground: #737373;
+      --accent: #F0E6D3;
+      --accent-foreground: #3D3D3D;
+      --border: #E8E5E0;
+
+      --radius: 1rem;
+    }
+
+    /* ========================================
+       CLASSIC STRUCTURE THEME
+       Traditional, warm, timeless
+       ======================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    /* Header - Transparent with blur */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      background: rgba(253, 252, 251, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--foreground);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
+    }
+
+    /* Hero - Centered */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(184, 134, 11, 0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 50%, rgba(212, 165, 165, 0.05), transparent),
+        radial-gradient(ellipse 60% 40% at 20% 50%, rgba(201, 168, 108, 0.05), transparent),
+        var(--background);
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero-tagline {
+      color: var(--primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 600;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--muted-foreground);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--foreground);
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Info Cards Section */
+    .info-section {
+      padding: 5rem 2rem;
+      background: var(--background);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(232, 229, 224, 0.5);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(184, 134, 11, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* Services Section */
+    .services-section {
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, var(--background) 0%, rgba(184, 134, 11, 0.03) 50%, var(--background) 100%);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      color: var(--primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .section-header p {
+      color: var(--muted-foreground);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--card);
+      border: 1px solid rgba(232, 229, 224, 0.5);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .service-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card .category {
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card p {
+      color: var(--muted-foreground);
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .service-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .service-duration {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* Gallery Section */
+    .gallery-section {
+      padding: 5rem 2rem;
+      background: var(--background);
+    }
+
+    .gallery-grid {
+      columns: 2;
+      column-gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .gallery-grid {
+        columns: 3;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .gallery-grid {
+        columns: 4;
+      }
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .gallery-overlay svg {
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover .gallery-overlay svg {
+      opacity: 1;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 5rem 2rem;
+      background: var(--charcoal);
+      color: white;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      background: linear-gradient(180deg, var(--card) 0%, rgba(245, 245, 243, 0.3) 100%);
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-section h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--foreground);
+    }
+
+    .footer-section p,
+    .footer-section a {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 2rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* Icons (inline SVG) */
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="logo">GOLDSCHNITT</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Leistungen</a>
+        <a href="#">Galerie</a>
+        <a href="#">Kontakt</a>
+      </nav>
+      <a href="#" class="btn-primary">Termin buchen</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-tagline">Exklusiver Friseursalon Basel</p>
+      <h1>Luxus trifft Handwerk</h1>
+      <p>Bei GOLDSCHNITT erleben Sie erstklassige Haarpflege in einer Atmosphäre von zeitloser Eleganz. Jeder Besuch ein besonderes Erlebnis.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn-primary">Termin buchen</a>
+        <a href="#" class="btn-secondary">Leistungen</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Cards -->
+  <section class="info-section">
+    <div class="container">
+      <div class="info-grid">
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3>Standort</h3>
+          <p>Spalenberg 28, 4051 Basel</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3>Öffnungszeiten</h3>
+          <p>Di-Fr 10:00-19:00, Sa 09:00-17:00</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+          </div>
+          <h3>Premium Services</h3>
+          <p>Olaplex Treatments, Extensions, Brautstyling</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services-section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Unsere Services</p>
+        <h2>Exklusive Behandlungen</h2>
+        <p>Von klassischen Schnitten bis zu aufwendigen Colorationen - bei uns sind Sie in besten Händen.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <p class="category">Signature</p>
+          <h3>Goldschnitt Luxus-Cut</h3>
+          <p>Ausführliche Beratung, Kopfmassage, Waschen, Schnitt und Föhnstyling</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 120</span>
+            <span class="service-duration">90 Min.</span>
+          </div>
+        </div>
+        <div class="service-card">
+          <p class="category">Farbe</p>
+          <h3>Handgemalte Strähnchen</h3>
+          <p>Individuelle Farbtechnik für natürlich wirkende Highlights</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 220</span>
+            <span class="service-duration">150 Min.</span>
+          </div>
+        </div>
+        <div class="service-card">
+          <p class="category">Pflege</p>
+          <h3>Olaplex Intensiv-Kur</h3>
+          <p>Tiefenpflege für geschädigtes Haar mit Bond-Reparatur</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 85</span>
+            <span class="service-duration">45 Min.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery-section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Impressionen</p>
+        <h2>Galerie</h2>
+        <p>Einblicke in unseren Salon und unsere Arbeiten</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose-light), var(--gold-light)); aspect-ratio: 3/4;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--gold-light), var(--cream)); aspect-ratio: 4/3;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--cream), var(--rose-light)); aspect-ratio: 1/1;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose), var(--gold)); aspect-ratio: 3/4;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--gold), var(--rose-light)); aspect-ratio: 4/5;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose-light), var(--cream)); aspect-ratio: 1/1;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--cream), var(--gold-light)); aspect-ratio: 3/4;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--gold-light), var(--rose)); aspect-ratio: 4/3;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Gönnen Sie sich das Beste</h2>
+      <p>Buchen Sie Ihren persönlichen Verwöhntermin online - wir freuen uns, Sie bei GOLDSCHNITT begrüssen zu dürfen.</p>
+      <a href="#" class="btn-primary">Jetzt Termin buchen</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>GOLDSCHNITT</h4>
+        <p>Exklusiver Friseursalon im Herzen von Basel.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Kontakt</h4>
+        <p>Spalenberg 28</p>
+        <p>4051 Basel</p>
+        <p>Tel: 061 272 33 44</p>
+      </div>
+      <div class="footer-section">
+        <h4>Links</h4>
+        <a href="#">Leistungen</a>
+        <a href="#">Galerie</a>
+        <a href="#">Über uns</a>
+        <a href="#">Kontakt</a>
+      </div>
+      <div class="footer-section">
+        <h4>Öffnungszeiten</h4>
+        <p>Mo: Geschlossen</p>
+        <p>Di-Fr: 10:00-19:00</p>
+        <p>Sa: 09:00-17:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 GOLDSCHNITT. Theme: Rose Gold Classic</p>
+    </div>
+  </footer>
+</body>
+</html>

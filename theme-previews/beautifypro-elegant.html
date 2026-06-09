@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rose Gold Elegant - Theme Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       BeautifyPRO COLOR THEME
+       Rose Gold & Cream - Luxury Salon
+       ======================================== */
+    :root {
+      --gold: #C9A86C;
+      --gold-light: #E5D4B3;
+      --gold-dark: #A08050;
+      --rose: #D4A5A5;
+      --rose-light: #F0DEDE;
+      --rose-dark: #B07575;
+      --cream: #FAF9F7;
+      --charcoal: #1C1917;
+
+      --background: #FDFCFB;
+      --foreground: #1C1917;
+      --card: #FFFFFF;
+      --card-foreground: #1C1917;
+      --primary: #B8860B;
+      --primary-foreground: #FDFCFB;
+      --secondary: #F5E6E6;
+      --secondary-foreground: #3D3D3D;
+      --muted: #F5F5F3;
+      --muted-foreground: #737373;
+      --accent: #F0E6D3;
+      --accent-foreground: #3D3D3D;
+      --border: #E8E5E0;
+
+      --radius: 0.5rem;
+    }
+
+    /* ========================================
+       ELEGANT STRUCTURE THEME
+       Sophisticated, serif fonts, refined
+       ======================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(180deg, var(--background) 0%, rgba(201, 168, 108, 0.02) 50%, var(--background) 100%);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    /* Header - Transparent with fine border */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      background: rgba(253, 252, 251, 0.9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(232, 229, 224, 0.1);
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 400;
+      font-style: italic;
+      font-family: Georgia, 'Times New Roman', serif;
+      letter-spacing: 0.05em;
+      color: var(--foreground);
+    }
+
+    nav {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav a {
+      color: var(--foreground);
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: letter-spacing 0.3s ease;
+    }
+
+    nav a:hover {
+      letter-spacing: 0.12em;
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      padding: 0.875rem 2rem;
+      border-radius: 0.25rem;
+      font-weight: 400;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      letter-spacing: 0.15em;
+    }
+
+    /* Hero - Video style (elegant centered) */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, var(--background) 0%, rgba(184, 134, 11, 0.02) 50%, transparent 100%);
+    }
+
+    .hero-content {
+      max-width: 700px;
+    }
+
+    .hero-decoration {
+      color: var(--gold);
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.6;
+    }
+
+    .hero-tagline {
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 400;
+      font-style: italic;
+      font-family: Georgia, 'Times New Roman', serif;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: 0.03em;
+    }
+
+    .hero h1::after {
+      content: '';
+      display: block;
+      width: 6rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1.5rem auto;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--muted-foreground);
+      margin-bottom: 2.5rem;
+      line-height: 1.9;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--foreground);
+      padding: 0.875rem 2rem;
+      border-radius: 0.25rem;
+      font-weight: 400;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      letter-spacing: 0.15em;
+    }
+
+    /* Sections */
+    .section {
+      padding: 5rem 2rem;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Section Header with decoration */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header::before {
+      content: '\2726';
+      display: block;
+      font-size: 1rem;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: 1rem;
+    }
+
+    .section-tag {
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 400;
+      font-style: italic;
+      font-family: Georgia, 'Times New Roman', serif;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      letter-spacing: 0.02em;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-header h2::after {
+      content: '';
+      position: absolute;
+      bottom: -0.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+
+    .section-header p {
+      color: var(--muted-foreground);
+      max-width: 500px;
+      margin: 1.5rem auto 0;
+      line-height: 1.9;
+    }
+
+    /* Cards - Subtle with gold top border on hover */
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(232, 229, 224, 0.15);
+      border-radius: 0.25rem;
+      padding: 2rem;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 20%, var(--gold) 50%, transparent 80%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      border-color: rgba(232, 229, 224, 0.3);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(184, 134, 11, 0.08);
+      border-radius: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      color: var(--primary);
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      line-height: 1.7;
+    }
+
+    /* Services Grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .service-card {
+      padding: 2.5rem;
+    }
+
+    .service-card .category {
+      color: var(--primary);
+      font-size: 0.7rem;
+      font-weight: 400;
+      font-style: italic;
+      font-family: Georgia, 'Times New Roman', serif;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card p {
+      color: var(--muted-foreground);
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .service-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .service-price {
+      font-size: 1.25rem;
+      font-style: italic;
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--primary);
+    }
+
+    .service-duration {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* Gallery - Masonry */
+    .gallery-grid {
+      columns: 2;
+      column-gap: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .gallery-grid { columns: 3; }
+    }
+
+    @media (min-width: 1024px) {
+      .gallery-grid { columns: 4; }
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 1.25rem;
+      border-radius: 0.25rem;
+      overflow: hidden;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, var(--charcoal) 0%, rgba(184, 134, 11, 0.8) 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 300;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      background: var(--card);
+      border-top: 1px solid rgba(232, 229, 224, 0.1);
+    }
+
+    footer::before {
+      content: '';
+      display: block;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin-bottom: 3rem;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-section h4 {
+      font-size: 0.75rem;
+      font-weight: 400;
+      font-style: italic;
+      font-family: Georgia, 'Times New Roman', serif;
+      margin-bottom: 1rem;
+      color: var(--foreground);
+    }
+
+    .footer-section p,
+    .footer-section a {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 2rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      nav { display: none; }
+      .hero-buttons { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">Salon Rosé</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Leistungen</a>
+        <a href="#">Galerie</a>
+        <a href="#">Kontakt</a>
+      </nav>
+      <a href="#" class="btn-primary">Termin buchen</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-decoration">\2726</div>
+      <p class="hero-tagline">Exquisite Haarpflege Bern</p>
+      <h1>Eleganz in jedem Detail</h1>
+      <p>Willkommen im Salon Rosé - Ihre Oase der Schönheit in Bern. Erleben Sie raffinierte Haarkunst in einem Ambiente voller Stil und Wärme.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn-primary">Termin buchen</a>
+        <a href="#" class="btn-secondary">Entdecken</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="info-grid">
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3>Standort</h3>
+          <p>Kramgasse 15, 3011 Bern</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3>Öffnungszeiten</h3>
+          <p>Di-Fr 09:30-18:30, Sa 09:00-16:00</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+          </div>
+          <h3>Spezialitäten</h3>
+          <p>Hochsteckfrisuren, Brautservice, Keratinbehandlungen</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Unsere Expertise</p>
+        <h2>Ausgewählte Services</h2>
+        <p>Vom klassischen Schnitt bis zur kunstvollen Hochsteckfrisur.</p>
+      </div>
+      <div class="services-grid">
+        <div class="card service-card">
+          <p class="category">Signature</p>
+          <h3>Rosé Deluxe Schnitt</h3>
+          <p>Beratung, Aromahaarpflege, Schnitt und professionelles Styling</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 110</span>
+            <span class="service-duration">75 Min.</span>
+          </div>
+        </div>
+        <div class="card service-card">
+          <p class="category">Hochzeit</p>
+          <h3>Brautstyling Komplett</h3>
+          <p>Probe-Styling, Hochsteckfrisur am Tag, inklusive Anfahrt</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 350</span>
+            <span class="service-duration">nach Absprache</span>
+          </div>
+        </div>
+        <div class="card service-card">
+          <p class="category">Glättung</p>
+          <h3>Keratin Silk Treatment</h3>
+          <p>Professionelle Keratinglättung für seidig glattes Haar</p>
+          <div class="service-meta">
+            <span class="service-price">CHF 280</span>
+            <span class="service-duration">180 Min.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-tag">Atmosphäre</p>
+        <h2>Galerie</h2>
+        <p>Einblicke in unser elegantes Ambiente</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose-light), var(--gold-light)); aspect-ratio: 3/4;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--gold-light), var(--cream)); aspect-ratio: 4/3;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--cream), var(--rose-light)); aspect-ratio: 1/1;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose), var(--gold)); aspect-ratio: 3/4;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--gold), var(--rose-light)); aspect-ratio: 4/5;"></div>
+        <div class="gallery-item" style="background: linear-gradient(135deg, var(--rose-light), var(--cream)); aspect-ratio: 1/1;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ihr Moment der Schönheit</h2>
+      <p>Reservieren Sie Ihren persönlichen Termin und erleben Sie die Kunst der Haarpflege.</p>
+      <a href="#" class="btn-primary">Jetzt Termin buchen</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Salon Rosé</h4>
+        <p>Exquisite Haarpflege im Herzen von Bern.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Kontakt</h4>
+        <p>Kramgasse 15</p>
+        <p>3011 Bern</p>
+        <p>Tel: 031 312 88 99</p>
+      </div>
+      <div class="footer-section">
+        <h4>Links</h4>
+        <a href="#">Leistungen</a>
+        <a href="#">Galerie</a>
+        <a href="#">Kontakt</a>
+      </div>
+      <div class="footer-section">
+        <h4>Öffnungszeiten</h4>
+        <p>Di-Fr: 09:30-18:30</p>
+        <p>Sa: 09:00-16:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Salon Rosé. Theme: Rose Gold Elegant</p>
+    </div>
+  </footer>
+</body>
+</html>

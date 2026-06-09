@@ -1,0 +1,8 @@
+{
+  "mode": "mock",
+  "role": "admin",
+  "loginUrl": "/admin/login",
+  "email": "admin@beautifypro.demo",
+  "password": "beauty-admin-demo",
+  "note": "Demo-only credentials for the BEAUTY presentation repository. Do not use in production."
+}

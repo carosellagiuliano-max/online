@@ -1,0 +1,8 @@
+{
+  "mode": "mock",
+  "role": "customer",
+  "loginUrl": "/konto/login",
+  "email": "kunde@beautifypro.demo",
+  "password": "beauty-kunde-demo",
+  "note": "Demo-only credentials for the BEAUTY presentation repository. Do not use in production."
+}

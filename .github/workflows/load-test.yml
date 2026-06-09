@@ -1,0 +1,130 @@
+# BeautifyPRO - Load Test Workflow
+# Runs load tests against staging/production environments
+
+name: Load Tests
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      duration:
+        description: 'Test duration (e.g., 30s, 1m, 5m)'
+        required: true
+        default: '1m'
+      vus:
+        description: 'Number of virtual users'
+        required: true
+        default: '10'
+
+  # Run on staging deploys
+  deployment_status:
+
+jobs:
+  # ============================================
+  # LOAD TEST
+  # ============================================
+  load-test:
+    name: Run Load Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'staging')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Determine base URL
+        id: url
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            if [ "${{ inputs.environment }}" == "production" ]; then
+              echo "base_url=https://beautifypro.demo" >> $GITHUB_OUTPUT
+            else
+              echo "base_url=https://staging.beautifypro.demo" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "base_url=${{ github.event.deployment_status.target_url }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run API stress test
+        run: |
+          k6 run \
+            --env BASE_URL=${{ steps.url.outputs.base_url }} \
+            --duration ${{ inputs.duration || '1m' }} \
+            --vus ${{ inputs.vus || '10' }} \
+            loadtests/api-stress.js
+        continue-on-error: true
+
+      - name: Run booking flow test
+        run: |
+          k6 run \
+            --env BASE_URL=${{ steps.url.outputs.base_url }} \
+            --duration ${{ inputs.duration || '1m' }} \
+            --vus ${{ inputs.vus || '5' }} \
+            loadtests/booking-flow.js
+        continue-on-error: true
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-results
+          path: |
+            *.json
+            *.html
+          retention-days: 30
+
+  # ============================================
+  # PERFORMANCE BUDGET CHECK
+  # ============================================
+  performance-budget:
+    name: Performance Budget
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli
+
+      - name: Determine base URL
+        id: url
+        run: |
+          if [ "${{ inputs.environment }}" == "production" ]; then
+            echo "base_url=https://beautifypro.demo" >> $GITHUB_OUTPUT
+          else
+            echo "base_url=https://staging.beautifypro.demo" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Lighthouse
+        run: |
+          lhci autorun \
+            --collect.url="${{ steps.url.outputs.base_url }}" \
+            --collect.url="${{ steps.url.outputs.base_url }}/services" \
+            --collect.url="${{ steps.url.outputs.base_url }}/about"
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Check performance budgets
+        run: |
+          echo "Performance budgets:"
+          echo "- First Contentful Paint: < 1.8s"
+          echo "- Largest Contentful Paint: < 2.5s"
+          echo "- Time to Interactive: < 3.8s"
+          echo "- Cumulative Layout Shift: < 0.1"
