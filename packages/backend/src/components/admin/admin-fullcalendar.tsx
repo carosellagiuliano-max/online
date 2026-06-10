@@ -110,7 +110,15 @@ import {
   markAppointmentCompleted,
   markAppointmentNoShow
 } from '@/lib/actions';
+import {
+  addMockCalendarAppointment,
+  getMockCalendarAppointments,
+  searchMockCustomers,
+} from '@/lib/mock/mock-calendar';
 import { toast } from 'sonner';
+
+// Demo mode without database (same pattern as login-form.tsx)
+const isMockMode = process.env.NEXT_PUBLIC_MOCK_MODE === 'true';
 
 // ============================================
 // TYPES
@@ -665,6 +673,17 @@ export function AdminFullCalendar({
     if (!silent) setIsLoading(true);
     setIsRefreshing(true);
 
+    if (isMockMode) {
+      // Demo mode: demo appointments + browser-created ones (localStorage)
+      setAppointments(
+        getMockCalendarAppointments(start.toISOString(), end.toISOString(), selectedStaff)
+      );
+      setLastRefresh(new Date());
+      if (!silent) setIsLoading(false);
+      setIsRefreshing(false);
+      return;
+    }
+
     try {
       const data = await getAdminCalendarAppointments(
         salonId,
@@ -685,6 +704,11 @@ export function AdminFullCalendar({
 
   // Fetch staff blocks
   const fetchStaffBlocks = useCallback(async (start: Date, end: Date) => {
+    if (isMockMode) {
+      setStaffBlocks([]);
+      return;
+    }
+
     try {
       const data = await getAdminStaffBlocks(
         salonId,
@@ -993,6 +1017,11 @@ export function AdminFullCalendar({
       return;
     }
 
+    if (isMockMode) {
+      setCustomerResults(searchMockCustomers(query));
+      return;
+    }
+
     setIsSearching(true);
 
     try {
@@ -1062,6 +1091,41 @@ export function AdminFullCalendar({
 
       // Determine customer email for confirmation
       const customerEmail = newAppointmentForm.customerEmail || undefined;
+
+      if (isMockMode) {
+        // Demo mode: persist the appointment in this browser (localStorage)
+        addMockCalendarAppointment({
+          staff: {
+            id: selectedStaffMember.id,
+            display_name: selectedStaffMember.display_name,
+            color: selectedStaffMember.color,
+          },
+          service: {
+            id: selectedService.id,
+            name: selectedService.name,
+            duration_minutes: selectedService.duration_minutes,
+            price_cents: selectedService.price_cents,
+          },
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString(),
+          notes: newAppointmentForm.notes || undefined,
+          customerName: newAppointmentForm.customerName,
+          customerEmail,
+          customerPhone: newAppointmentForm.customerPhone || undefined,
+        });
+
+        toast.success('Termin erstellt (Demo-Modus)');
+        setIsNewAppointmentOpen(false);
+        resetNewAppointmentForm();
+
+        // Refresh calendar from the mock store
+        const calendarApi = calendarRef.current?.getApi();
+        if (calendarApi) {
+          const view = calendarApi.view;
+          fetchAppointments(view.activeStart, view.activeEnd);
+        }
+        return;
+      }
 
       // Create appointment using server action (bypasses RLS)
       const result = await adminCreateAppointment({

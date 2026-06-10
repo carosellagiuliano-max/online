@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useThemeLayout } from '@/contexts/theme-layout-context'
+import { useMockGalleryAdditions } from '@/components/gallery/mock-gallery-additions'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react'
@@ -27,6 +28,15 @@ interface GallerySectionProps {
   maxItems?: number
 }
 
+function isUnoptimizedImage(image: GalleryImage): boolean {
+  // Demo-mode images (data: URLs or arbitrary hosts) bypass the Next.js optimizer.
+  return (
+    image.url.includes('localhost') ||
+    image.url.startsWith('data:') ||
+    image.id.startsWith('gal-')
+  )
+}
+
 export function GallerySection({
   title = 'Galerie',
   subtitle = 'Einblicke in unseren Salon',
@@ -34,7 +44,21 @@ export function GallerySection({
   maxItems = 8,
 }: GallerySectionProps) {
   const { layout } = useThemeLayout()
-  const displayImages = images.slice(0, maxItems)
+
+  // Demo mode: merge homepage images created in the admin (localStorage) after mount.
+  const mockAdditions = useMockGalleryAdditions()
+  const allImages = useMemo(() => {
+    const additions = mockAdditions
+      .filter((item) => item.show_on_homepage !== false)
+      .map((item) => ({
+        id: item.id,
+        url: item.url,
+        alt: item.alt_text || item.title || 'Galerie Bild',
+      }))
+    return additions.length > 0 ? [...images, ...additions] : images
+  }, [images, mockAdditions])
+
+  const displayImages = allImages.slice(0, maxItems)
 
   switch (layout.gallery) {
     case 'grid':
@@ -123,7 +147,7 @@ function GalleryMasonry({ title, subtitle, images, layout }: GalleryVariantProps
                   width={400}
                   height={index % 3 === 0 ? 500 : index % 2 === 0 ? 350 : 400}
                   className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                  unoptimized={image.url.includes('localhost')}
+                  unoptimized={isUnoptimizedImage(image)}
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                   <ZoomIn className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -145,7 +169,7 @@ function GalleryMasonry({ title, subtitle, images, layout }: GalleryVariantProps
                 width={1200}
                 height={800}
                 className="w-full h-auto rounded-lg"
-                unoptimized={selectedImage.url.includes('localhost')}
+                unoptimized={isUnoptimizedImage(selectedImage)}
               />
               <Button
                 variant="ghost"
@@ -196,7 +220,7 @@ function GalleryGrid({ title, subtitle, images, layout }: GalleryVariantProps) {
                 alt={image.alt}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
-                unoptimized={image.url.includes('localhost')}
+                unoptimized={isUnoptimizedImage(image)}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                 <ZoomIn className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -217,7 +241,7 @@ function GalleryGrid({ title, subtitle, images, layout }: GalleryVariantProps) {
                 width={1200}
                 height={800}
                 className="w-full h-auto rounded-lg"
-                unoptimized={selectedImage.url.includes('localhost')}
+                unoptimized={isUnoptimizedImage(selectedImage)}
               />
               <Button
                 variant="ghost"
@@ -316,7 +340,7 @@ function GallerySlider({ title, subtitle, images, layout }: GalleryVariantProps)
                   alt={image.alt}
                   fill
                   className="object-cover"
-                  unoptimized={image.url.includes('localhost')}
+                  unoptimized={isUnoptimizedImage(image)}
                 />
               </div>
             </div>
@@ -391,7 +415,7 @@ function GalleryLightbox({ title, subtitle, images, layout }: GalleryVariantProp
                 alt={images[0].alt}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
-                unoptimized={images[0].url.includes('localhost')}
+                unoptimized={isUnoptimizedImage(images[0])}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
@@ -412,7 +436,7 @@ function GalleryLightbox({ title, subtitle, images, layout }: GalleryVariantProp
                 alt={image.alt}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
-                unoptimized={image.url.includes('localhost')}
+                unoptimized={isUnoptimizedImage(image)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
@@ -431,7 +455,7 @@ function GalleryLightbox({ title, subtitle, images, layout }: GalleryVariantProp
                 width={1400}
                 height={900}
                 className="max-w-full max-h-[85vh] object-contain"
-                unoptimized={images[selectedIndex].url.includes('localhost')}
+                unoptimized={isUnoptimizedImage(images[selectedIndex])}
               />
 
               {/* Navigation */}

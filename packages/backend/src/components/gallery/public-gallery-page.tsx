@@ -1,8 +1,12 @@
+'use client';
+
+import { useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Camera, Instagram } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import type { PublicGalleryCategory } from '@/lib/actions/gallery';
+import { useMockGalleryAdditions } from '@/components/gallery/mock-gallery-additions';
 
 interface PublicGalleryPageProps {
   categories: PublicGalleryCategory[];
@@ -17,6 +21,11 @@ function isLocalImage(url: string): boolean {
   return url.includes('localhost') || url.includes('127.0.0.1');
 }
 
+function isUnoptimizedImage(image: { id: string; url: string }): boolean {
+  // Demo-mode images (data: URLs or arbitrary hosts) bypass the Next.js optimizer.
+  return isLocalImage(image.url) || image.url.startsWith('data:') || image.id.startsWith('gal-');
+}
+
 export function PublicGalleryPage({
   categories,
   instagramUrl,
@@ -25,7 +34,51 @@ export function PublicGalleryPage({
   title = 'Galerie',
   description = 'Lassen Sie sich von aktuellen Arbeiten, Salonmomenten und Details inspirieren.',
 }: PublicGalleryPageProps) {
-  const totalImages = categories.reduce((total, category) => total + category.images.length, 0);
+  // Demo mode: merge images created in the admin (localStorage) after mount.
+  const mockAdditions = useMockGalleryAdditions();
+
+  const displayCategories = useMemo(() => {
+    if (mockAdditions.length === 0) return categories;
+
+    const merged = categories.map((category) => ({ ...category, images: [...category.images] }));
+    const uncategorized: PublicGalleryCategory['images'] = [];
+
+    for (const item of mockAdditions) {
+      const image = {
+        id: item.id,
+        url: item.url,
+        alt: item.alt_text || item.title || 'Galerie Bild',
+        title: item.title,
+        description: item.description,
+      };
+      const target = item.category_id
+        ? merged.find((category) => category.id === item.category_id)
+        : undefined;
+      if (target) {
+        target.images.push({ ...image, category: target.name });
+      } else {
+        uncategorized.push(image);
+      }
+    }
+
+    if (uncategorized.length > 0) {
+      merged.push({
+        id: 'mock-added',
+        name: 'Neu',
+        slug: 'neu',
+        description: null,
+        sortOrder: Number.MAX_SAFE_INTEGER,
+        images: uncategorized,
+      });
+    }
+
+    return merged;
+  }, [categories, mockAdditions]);
+
+  const totalImages = displayCategories.reduce(
+    (total, category) => total + category.images.length,
+    0
+  );
 
   return (
     <div className="py-12">
@@ -40,7 +93,7 @@ export function PublicGalleryPage({
 
         {totalImages > 0 && (
           <div className="mt-8 flex flex-wrap justify-center gap-2">
-            {categories.map((category) => (
+            {displayCategories.map((category) => (
               <Link
                 key={category.id}
                 href={`#${category.slug}`}
@@ -70,7 +123,7 @@ export function PublicGalleryPage({
             </CardContent>
           </Card>
         ) : (
-          categories.map((category, categoryIndex) => (
+          displayCategories.map((category, categoryIndex) => (
             <div key={category.id} id={category.slug} className="scroll-mt-24">
               <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -100,7 +153,7 @@ export function PublicGalleryPage({
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         priority={categoryIndex === 0 && imageIndex < 2}
-                        unoptimized={isLocalImage(image.url)}
+                        unoptimized={isUnoptimizedImage(image)}
                       />
 
                       {(image.title || image.description) && (

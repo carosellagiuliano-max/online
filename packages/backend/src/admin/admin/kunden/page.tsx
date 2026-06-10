@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { getCurrentStaffMember } from '@/lib/auth/rbac';
 import { resolveStaffSalonId } from '@/lib/auth/admin-context';
+import { isMockMode, MOCK_CUSTOMERS, MOCK_APPOINTMENTS } from '@/lib/mock/mock-data';
 import { AdminCustomerList } from '@/components/admin/admin-customer-list';
 
 // Force dynamic rendering (API not available at build time)
@@ -103,6 +104,12 @@ async function getCustomersData(searchParams: {
   }
 
   const salonId = resolveStaffSalonId(staffMember.salon_id);
+
+  // Mock mode: serve demo customers instead of querying Supabase
+  if (isMockMode()) {
+    return getMockCustomersData(salonId, searchParams);
+  }
+
   const supabase = createServiceRoleClient();
 
   if (!supabase) {
@@ -344,6 +351,76 @@ async function getCustomersData(searchParams: {
     limit,
     stats,
     appointmentOptions,
+  };
+}
+
+// ============================================
+// MOCK DATA (Demo-Modus ohne Datenbank)
+// ============================================
+
+function getMockCustomersData(
+  salonId: string,
+  searchParams: { search?: string; page?: string; limit?: string }
+) {
+  const page = parseInt(searchParams.page || '1');
+  const limit = parseInt(searchParams.limit || '20');
+  const search = sanitizeSearchTerm(searchParams.search || '').toLowerCase();
+
+  // Appointment counts per customer (non-cancelled), like the real query
+  const appointmentCounts = MOCK_APPOINTMENTS.reduce((acc, apt) => {
+    if (apt.status !== 'cancelled' && apt.customer_id) {
+      acc[apt.customer_id] = (acc[apt.customer_id] || 0) + 1;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+
+  const allCustomers: (CustomerListRow & { appointments: { count: number }[] })[] =
+    MOCK_CUSTOMERS.map((customer) => ({
+      id: customer.id,
+      first_name: customer.first_name,
+      last_name: customer.last_name,
+      email: customer.email,
+      phone: customer.phone,
+      profile:
+        'profile_id' in customer && customer.profile_id
+          ? { email: customer.email, phone: customer.phone, is_deleted: false }
+          : null,
+      created_at: customer.created_at,
+      is_active: true,
+      appointments: [{ count: appointmentCounts[customer.id] || 0 }],
+    })).sort((a, b) => b.created_at.localeCompare(a.created_at));
+
+  const customers = search
+    ? allCustomers.filter((customer) =>
+        `${customer.first_name} ${customer.last_name} ${customer.email || ''} ${customer.phone || ''}`
+          .toLowerCase()
+          .includes(search)
+      )
+    : allCustomers;
+
+  const withAccount = allCustomers.filter((customer) => customer.profile).length;
+
+  return {
+    salonId,
+    customers,
+    total: customers.length,
+    page,
+    limit,
+    stats: {
+      totalCustomers: allCustomers.length,
+      activeCustomers: allCustomers.length,
+      withAccount,
+      withoutAccount: allCustomers.length - withAccount,
+      totalAppointments: MOCK_APPOINTMENTS.filter((apt) => apt.status !== 'cancelled').length,
+    },
+    appointmentOptions: {
+      salonTimeZone: 'Europe/Zurich',
+      services: [],
+      staff: [],
+      staffSkills: [],
+      staffWorkingHours: [],
+      openingHours: [],
+    },
   };
 }
 

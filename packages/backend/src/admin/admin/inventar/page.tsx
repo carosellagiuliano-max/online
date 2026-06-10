@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { getCurrentStaffMember } from '@/lib/auth/rbac';
 import { resolveStaffSalonId } from '@/lib/auth/admin-context';
+import { isMockMode, MOCK_PRODUCTS } from '@/lib/mock/mock-data';
 import { AdminInventoryView } from '@/components/admin/admin-inventory-view';
 
 // Force dynamic rendering (API not available at build time)
@@ -118,6 +119,85 @@ interface StockMovementDbRow {
 }
 
 // ============================================
+// MOCK DATA (Demo-Modus ohne Datenbank)
+// ============================================
+
+function getMockInventoryData() {
+  const products: InventoryProduct[] = MOCK_PRODUCTS.map((p, index) => ({
+    id: p.id,
+    name: p.name,
+    sku: `BP-DEMO-${String(index + 1).padStart(3, '0')}`,
+    stockQuantity: p.stock_quantity,
+    lowStockThreshold: 5,
+    trackInventory: true,
+    priceCents: Math.round(p.price * 100),
+    categoryName: 'Demo',
+    isActive: p.is_active,
+    isLowStock: p.stock_quantity <= 5,
+    variants: [],
+  })).sort((a, b) => a.stockQuantity - b.stockQuantity);
+
+  const productName = (id: string) =>
+    MOCK_PRODUCTS.find((p) => p.id === id)?.name ?? 'Unbekannt';
+  const hoursAgo = (hours: number) =>
+    new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
+
+  const movements: StockMovement[] = [
+    {
+      id: 'mock-mov-003',
+      productId: 'prod-003',
+      productName: productName('prod-003'),
+      variantId: null,
+      variantName: null,
+      movementType: 'sale',
+      quantity: -1,
+      previousQuantity: 3,
+      newQuantity: 3 - 1,
+      notes: 'Verkauf im Salon',
+      createdBy: 'Demo Admin',
+      createdAt: hoursAgo(5),
+    },
+    {
+      id: 'mock-mov-002',
+      productId: 'prod-002',
+      productName: productName('prod-002'),
+      variantId: null,
+      variantName: null,
+      movementType: 'sale',
+      quantity: -2,
+      previousQuantity: 10,
+      newQuantity: 10 - 2,
+      notes: 'Verkauf nach Behandlung',
+      createdBy: 'Demo Admin',
+      createdAt: hoursAgo(26),
+    },
+    {
+      id: 'mock-mov-001',
+      productId: 'prod-002',
+      productName: productName('prod-002'),
+      variantId: null,
+      variantName: null,
+      movementType: 'purchase',
+      quantity: 10,
+      previousQuantity: 0,
+      newQuantity: 10,
+      notes: 'Wareneingang Lieferung',
+      createdBy: 'Demo Admin',
+      createdAt: hoursAgo(72),
+    },
+  ];
+
+  const stats: InventoryStats = {
+    totalProducts: products.length,
+    lowStockCount: products.filter((p) => p.stockQuantity > 0 && p.isLowStock).length,
+    outOfStockCount: products.filter((p) => p.stockQuantity <= 0).length,
+    totalValue: products.reduce((sum, p) => sum + p.stockQuantity * p.priceCents, 0),
+  };
+
+  return { products, movements, stats };
+}
+
+// ============================================
 // DATA FETCHING
 // ============================================
 
@@ -125,6 +205,11 @@ async function getInventoryData() {
   const staffMember = await getCurrentStaffMember();
   if (!staffMember) {
     redirect('/admin/login');
+  }
+
+  // Demo-Modus: Inventar aus Mock-Daten aufbauen (keine Datenbank)
+  if (isMockMode()) {
+    return getMockInventoryData();
   }
 
   const salonId = resolveStaffSalonId(staffMember.salon_id);

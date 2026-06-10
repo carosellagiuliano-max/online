@@ -62,7 +62,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { adminCreateAppointment, adminCreateCustomer, adminDeleteCustomer } from '@/lib/actions';
+import {
+  MOCK_STORE_KEYS,
+  readMockCollection,
+  addToMockCollection,
+  mockId,
+} from '@/lib/mock/mock-store';
 import { toast } from 'sonner';
+
+const isMockMode = process.env.NEXT_PUBLIC_MOCK_MODE === 'true';
 
 // ============================================
 // TYPES
@@ -278,6 +286,21 @@ export function AdminCustomerList({
     phone: '',
     createAccount: true,
   });
+  // Demo-Modus: im Browser angelegte Kunden (localStorage)
+  const [localCustomers, setLocalCustomers] = useState<Customer[]>([]);
+
+  // Merge locally created demo customers only after mount (avoids hydration mismatch)
+  useEffect(() => {
+    if (!isMockMode) return;
+    const stored = readMockCollection<Customer>(MOCK_STORE_KEYS.customers);
+    if (stored.length > 0) {
+      setLocalCustomers([...stored].reverse()); // newest first
+    }
+  }, []);
+
+  const displayedCustomers =
+    localCustomers.length > 0 ? [...localCustomers, ...customers] : customers;
+  const displayedTotal = total + localCustomers.length;
 
   // Appointment dialog state
   const [appointmentDialogOpen, setAppointmentDialogOpen] = useState(false);
@@ -609,6 +632,27 @@ export function AdminCustomerList({
     setIsCreating(true);
 
     try {
+      if (isMockMode) {
+        // Demo-Modus: Kunde nur lokal im Browser speichern (keine Datenbank)
+        const customer: Customer = {
+          id: mockId('cust'),
+          first_name: newCustomer.first_name,
+          last_name: newCustomer.last_name,
+          email: newCustomer.email || null,
+          phone: newCustomer.phone || null,
+          profile: null,
+          created_at: new Date().toISOString(),
+          is_active: true,
+          appointments: [{ count: 0 }],
+        };
+        addToMockCollection(MOCK_STORE_KEYS.customers, customer);
+        setLocalCustomers((prev) => [customer, ...prev]);
+        toast.success('Kontakt erfolgreich erstellt');
+        setCreateDialogOpen(false);
+        setNewCustomer({ first_name: '', last_name: '', email: '', phone: '', createAccount: true });
+        return;
+      }
+
       const result = await adminCreateCustomer({
         firstName: newCustomer.first_name,
         lastName: newCustomer.last_name,
@@ -691,7 +735,7 @@ export function AdminCustomerList({
             <div>
               <CardTitle>Kundenübersicht</CardTitle>
               <p className="mt-1 text-sm text-muted-foreground">
-                {total} Treffer{initialSearch ? ` für "${initialSearch}"` : ''}.
+                {displayedTotal} Treffer{initialSearch ? ` für "${initialSearch}"` : ''}.
               </p>
             </div>
             <Button onClick={() => setCreateDialogOpen(true)} className="w-full sm:w-auto">
@@ -740,7 +784,7 @@ export function AdminCustomerList({
       {/* Customer Table */}
         <CardContent className="p-0">
           <div className="divide-y md:hidden">
-            {customers.length === 0 ? (
+            {displayedCustomers.length === 0 ? (
               <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
                 <User className="h-9 w-9 text-muted-foreground" />
                 <div>
@@ -755,7 +799,7 @@ export function AdminCustomerList({
                 </Button>
               </div>
             ) : (
-              customers.map((customer) => (
+              displayedCustomers.map((customer) => (
                 <div key={customer.id} className="space-y-3 p-4">
                   <div className="flex items-start justify-between gap-3">
                     <button
@@ -825,7 +869,7 @@ export function AdminCustomerList({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {customers.length === 0 ? (
+              {displayedCustomers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-8">
                     <div className="flex flex-col items-center gap-2">
@@ -835,7 +879,7 @@ export function AdminCustomerList({
                   </TableCell>
                 </TableRow>
               ) : (
-                customers.map((customer) => (
+                displayedCustomers.map((customer) => (
                   <TableRow key={customer.id}>
                     <TableCell>
                       <div className="flex items-center gap-2">

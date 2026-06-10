@@ -2,6 +2,13 @@ import type { Metadata } from 'next';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { getCurrentStaffMember } from '@/lib/auth/rbac';
 import { AdminFullCalendar } from '@/components/admin/admin-fullcalendar';
+import {
+  isMockMode,
+  MOCK_OPENING_HOURS,
+  MOCK_SALON,
+  MOCK_SERVICES,
+  MOCK_STAFF,
+} from '@/lib/mock/mock-data';
 
 // Force dynamic rendering (API not available at build time)
 export const dynamic = 'force-dynamic';
@@ -22,6 +29,52 @@ const DEFAULT_SALON_ID = '550e8400-e29b-41d4-a716-446655440001';
 const DEFAULT_TIME_ZONE = 'Europe/Zurich';
 
 async function getCalendarData() {
+  if (isMockMode()) {
+    const mockStaff = MOCK_STAFF.filter((member) => member.is_active).map((member) => ({
+      id: member.id,
+      display_name: `${member.first_name} ${member.last_name}`,
+      color: member.color,
+      is_active: member.is_active,
+      salon_id: member.salon_id,
+    }));
+    const openMockHours = MOCK_OPENING_HOURS.filter((hours) => !hours.is_closed);
+
+    return {
+      salonId: MOCK_SALON.id,
+      salonTimeZone: MOCK_SALON.timezone,
+      staff: mockStaff,
+      services: MOCK_SERVICES.filter((service) => service.is_active).map((service) => ({
+        id: service.id,
+        name: service.name,
+        duration_minutes: service.duration_minutes,
+        price_cents: service.price * 100,
+        is_active: service.is_active,
+      })),
+      // No skill restrictions in demo mode: every staff member offers every service
+      staffSkills: [] as Array<{ staff_id: string; service_id: string }>,
+      // Demo staff work during the salon opening hours
+      staffWorkingHours: mockStaff.flatMap((member) =>
+        openMockHours.map((hours) => ({
+          staff_id: member.id,
+          day_of_week: hours.day_of_week,
+          start_time: `${hours.open_time ?? '09:00'}:00`,
+          end_time: `${hours.close_time ?? '18:00'}:00`,
+        }))
+      ),
+      openingHours: MOCK_OPENING_HOURS.map((hours) => ({
+        dayOfWeek: hours.day_of_week,
+        openTime: hours.open_time,
+        closeTime: hours.close_time,
+        isOpen: !hours.is_closed,
+        hasLunchBreak: false,
+        lunchStart: null,
+        lunchEnd: null,
+      })),
+      requireAppointmentApproval: false,
+      salonClosures: [] as Array<{ id: string; startTime: string; endTime: string; reason: string | null }>,
+    };
+  }
+
   const currentStaff = await getCurrentStaffMember();
 
   if (!currentStaff) {

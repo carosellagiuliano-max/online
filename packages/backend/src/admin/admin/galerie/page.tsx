@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { protectManagerPage } from '@/lib/auth/rbac';
 import { resolveStaffSalonId } from '@/lib/auth/admin-context';
+import { isMockMode } from '@/lib/mock/mock-auth';
+import { getMockGallerySeed } from '@/lib/actions/gallery';
 import { AdminGalleryList } from '@/components/admin/admin-gallery-list';
 
 // Force dynamic rendering (API not available at build time)
@@ -59,6 +61,32 @@ type GalleryData = {
 async function getGalleryData(): Promise<GalleryData> {
   const staffMember = await protectManagerPage();
   const salonId = resolveStaffSalonId(staffMember.salon_id);
+
+  if (isMockMode()) {
+    const seed = await getMockGallerySeed();
+    const categoryNames = new Map(seed.categories.map((category) => [category.id, category.name]));
+    return {
+      salonId,
+      categories: seed.categories.map((category) => ({
+        ...category,
+        sort_order: category.sort_order ?? 0,
+        created_at: '2026-01-01T00:00:00Z',
+        updated_at: '2026-01-01T00:00:00Z',
+      })),
+      images: seed.images.map((image) => ({
+        ...image,
+        sort_order: image.sort_order ?? 0,
+        show_on_homepage: image.show_on_homepage ?? false,
+        storage_path: null,
+        created_at: image.created_at || '2026-01-01T00:00:00Z',
+        updated_at: image.created_at || '2026-01-01T00:00:00Z',
+        category_name: image.category_id
+          ? categoryNames.get(image.category_id) || null
+          : null,
+      })),
+    };
+  }
+
   const supabase = createServiceRoleClient();
   if (!supabase) {
     return { salonId, categories: [], images: [] };

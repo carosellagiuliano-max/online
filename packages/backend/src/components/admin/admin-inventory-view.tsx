@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import {
   Package,
   AlertTriangle,
@@ -54,6 +54,14 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import {
+  MOCK_STORE_KEYS,
+  readMockCollection,
+  addToMockCollection,
+  mockId,
+} from '@/lib/mock/mock-store';
+
+const isMockMode = process.env.NEXT_PUBLIC_MOCK_MODE === 'true';
 
 // ============================================
 // TYPES
@@ -112,6 +120,15 @@ interface AdminInventoryViewProps {
   stats: InventoryStats;
 }
 
+/** Im Demo-Modus persistierte Bestandsanpassung (localStorage). */
+interface MockInventoryAdjustment {
+  productId: string;
+  delta: number;
+  movementType: string;
+  notes: string | null;
+  createdAt: string;
+}
+
 // ============================================
 // HELPERS
 // ============================================
@@ -165,9 +182,70 @@ export function AdminInventoryView({
   const [adjustmentNotes, setAdjustmentNotes] = useState('');
   const [isAdjusting, setIsAdjusting] = useState(false);
   const [expandedProducts, setExpandedProducts] = useState<Set<string>>(new Set());
+  const [productList, setProductList] = useState<InventoryProduct[]>(products);
+  const [movementList, setMovementList] = useState<StockMovement[]>(movements);
+
+  // Demo-Modus: persistierte Anpassungen nach dem Mounten anwenden
+  // (im useEffect, um Hydration-Fehler zu vermeiden)
+  useEffect(() => {
+    if (!isMockMode) return;
+
+    const adjustments = readMockCollection<MockInventoryAdjustment>(
+      MOCK_STORE_KEYS.inventoryAdjustments
+    );
+    if (adjustments.length === 0) return;
+
+    const stockById = new Map(products.map((p) => [p.id, p.stockQuantity]));
+    const nameById = new Map(products.map((p) => [p.id, p.name]));
+    const synthesized: StockMovement[] = [];
+
+    adjustments.forEach((adjustment, index) => {
+      const previous = stockById.get(adjustment.productId);
+      if (previous === undefined) return;
+      const next = previous + adjustment.delta;
+      stockById.set(adjustment.productId, next);
+      synthesized.push({
+        id: `mock-adjustment-${index}`,
+        productId: adjustment.productId,
+        productName: nameById.get(adjustment.productId) ?? 'Unbekannt',
+        variantId: null,
+        variantName: null,
+        movementType: adjustment.movementType,
+        quantity: adjustment.delta,
+        previousQuantity: previous,
+        newQuantity: next,
+        notes: adjustment.notes,
+        createdBy: 'Demo Admin',
+        createdAt: adjustment.createdAt,
+      });
+    });
+
+    setProductList(
+      products.map((p) => {
+        const quantity = stockById.get(p.id) ?? p.stockQuantity;
+        return quantity === p.stockQuantity
+          ? p
+          : { ...p, stockQuantity: quantity, isLowStock: quantity <= p.lowStockThreshold };
+      })
+    );
+    // Neueste Bewegung zuerst (wie die Server-Daten sortiert sind)
+    setMovementList([...synthesized.reverse(), ...movements]);
+  }, [products, movements]);
+
+  // Demo-Modus: Statistik-Karten aus dem aktuellen Bestand ableiten
+  const displayedStats: InventoryStats = isMockMode
+    ? {
+        totalProducts: productList.length,
+        lowStockCount: productList.filter(
+          (p) => p.stockQuantity > 0 && p.stockQuantity <= p.lowStockThreshold
+        ).length,
+        outOfStockCount: productList.filter((p) => p.stockQuantity <= 0).length,
+        totalValue: productList.reduce((sum, p) => sum + p.stockQuantity * p.priceCents, 0),
+      }
+    : stats;
 
   // Filter products
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = productList.filter((product) => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (product.sku?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
@@ -222,6 +300,58 @@ export function AdminInventoryView({
     const qty = parseInt(adjustmentQuantity, 10);
     if (isNaN(qty) || qty <= 0) {
       toast.error('Bitte geben Sie eine gültige Menge ein');
+      return;
+    }
+
+    // Demo-Modus: Anpassung lokal anwenden und im Browser speichern (kein API-Aufruf)
+    if (isMockMode) {
+      const delta = adjustmentType === 'add' ? qty : -qty;
+      const previous =
+        productList.find((p) => p.id === selectedProduct.id)?.stockQuantity ??
+        selectedProduct.stockQuantity;
+      const next = previous + delta;
+
+      if (next < 0) {
+        toast.error('Der Bestand kann nicht negativ werden');
+        return;
+      }
+
+      const createdAt = new Date().toISOString();
+      const movement: StockMovement = {
+        id: mockId('mov'),
+        productId: selectedProduct.id,
+        productName: selectedProduct.name,
+        variantId: null,
+        variantName: null,
+        movementType: adjustmentReason,
+        quantity: delta,
+        previousQuantity: previous,
+        newQuantity: next,
+        notes: adjustmentNotes || null,
+        createdBy: 'Demo Admin',
+        createdAt,
+      };
+
+      setProductList((prev) =>
+        prev.map((p) =>
+          p.id === selectedProduct.id
+            ? { ...p, stockQuantity: next, isLowStock: next <= p.lowStockThreshold }
+            : p
+        )
+      );
+      setMovementList((prev) => [movement, ...prev]);
+      addToMockCollection<MockInventoryAdjustment>(MOCK_STORE_KEYS.inventoryAdjustments, {
+        productId: selectedProduct.id,
+        delta,
+        movementType: adjustmentReason,
+        notes: adjustmentNotes || null,
+        createdAt,
+      });
+
+      toast.success(
+        `Bestand ${adjustmentType === 'add' ? 'erhöht' : 'reduziert'}: ${qty} Stück (Demo-Modus)`
+      );
+      setAdjustDialogOpen(false);
       return;
     }
 
@@ -334,7 +464,7 @@ export function AdminInventoryView({
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalProducts}</div>
+            <div className="text-2xl font-bold">{displayedStats.totalProducts}</div>
             <p className="text-xs text-muted-foreground">
               mit Bestandsverfolgung
             </p>
@@ -348,7 +478,7 @@ export function AdminInventoryView({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-yellow-600">
-              {stats.lowStockCount}
+              {displayedStats.lowStockCount}
             </div>
             <p className="text-xs text-muted-foreground">
               unter Schwellwert
@@ -363,7 +493,7 @@ export function AdminInventoryView({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">
-              {stats.outOfStockCount}
+              {displayedStats.outOfStockCount}
             </div>
             <p className="text-xs text-muted-foreground">
               Produkte ohne Bestand
@@ -377,7 +507,7 @@ export function AdminInventoryView({
             <TrendingUp className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatPrice(stats.totalValue)}</div>
+            <div className="text-2xl font-bold">{formatPrice(displayedStats.totalValue)}</div>
             <p className="text-xs text-muted-foreground">
               Gesamtwert (Einkaufspreis)
             </p>
@@ -445,8 +575,8 @@ export function AdminInventoryView({
                   </TableRow>
                 ) : (
                   filteredProducts.map((product) => (
-                    <>
-                      <TableRow key={product.id}>
+                    <Fragment key={product.id}>
+                      <TableRow>
                         <TableCell className="w-[30px] pr-0">
                           {product.variants.length > 0 && (
                             <Button
@@ -573,7 +703,7 @@ export function AdminInventoryView({
                             </TableCell>
                           </TableRow>
                         ))}
-                    </>
+                    </Fragment>
                   ))
                 )}
               </TableBody>
@@ -608,14 +738,14 @@ export function AdminInventoryView({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {movements.length === 0 ? (
+                  {movementList.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={8} className="h-24 text-center">
                         Keine Lagerbewegungen vorhanden
                       </TableCell>
                     </TableRow>
                   ) : (
-                    movements.map((movement) => {
+                    movementList.map((movement) => {
                       const badge = getMovementTypeBadge(movement.movementType);
                       return (
                         <TableRow key={movement.id}>

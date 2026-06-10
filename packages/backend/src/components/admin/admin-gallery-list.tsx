@@ -53,6 +53,13 @@ import {
 } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
+import {
+  MOCK_STORE_KEYS,
+  addToMockCollection,
+  mockId,
+  readMockCollection,
+  removeFromMockCollection,
+} from '@/lib/mock/mock-store';
 
 interface GalleryCategory {
   id: string;
@@ -109,6 +116,38 @@ const NO_CATEGORY_VALUE = '__none__';
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
+// Demo mode without database: images are persisted per browser in localStorage.
+const isMockMode = process.env.NEXT_PUBLIC_MOCK_MODE === 'true';
+const MOCK_MAX_EDGE = 1200;
+const MOCK_MAX_DATA_URL_LENGTH = 1.5 * 1024 * 1024;
+const MOCK_IMAGE_TOO_LARGE_ERROR =
+  'Bild zu gross fuer den Demo-Modus – bitte kleineres Bild oder Bild-URL verwenden.';
+
+/** Downscale a file client-side to a JPEG data URL for the demo mode. */
+async function downscaleImageForMockMode(file: File): Promise<string> {
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const source = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const element = new window.Image();
+      element.onload = () => resolve(element);
+      element.onerror = () => reject(new Error('Bild konnte nicht gelesen werden.'));
+      element.src = objectUrl;
+    });
+    const scale = Math.min(1, MOCK_MAX_EDGE / Math.max(source.width, source.height, 1));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(source.width * scale));
+    canvas.height = Math.max(1, Math.round(source.height * scale));
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new Error(MOCK_IMAGE_TOO_LARGE_ERROR);
+    }
+    context.drawImage(source, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.8);
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 function compareSort<T extends { sort_order?: number | null; created_at?: string | null }>(
   a: T,
   b: T
@@ -119,7 +158,12 @@ function compareSort<T extends { sort_order?: number | null; created_at?: string
 }
 
 function isLocalImage(url: string): boolean {
-  return url.includes('localhost') || url.includes('127.0.0.1') || url.startsWith('blob:');
+  return (
+    url.includes('localhost') ||
+    url.includes('127.0.0.1') ||
+    url.startsWith('blob:') ||
+    url.startsWith('data:')
+  );
 }
 
 function getImageAlt(image: GalleryImage): string {
@@ -194,6 +238,19 @@ export function AdminGalleryList({
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Demo mode: merge images created in this browser (localStorage) into the list.
+  const [mockImages, setMockImages] = useState<GalleryImage[]>([]);
+
+  useEffect(() => {
+    if (!isMockMode) return;
+    setMockImages(readMockCollection<GalleryImage>(MOCK_STORE_KEYS.galleryImages));
+  }, []);
+
+  const allImages = useMemo(
+    () => (isMockMode && mockImages.length > 0 ? [...images, ...mockImages] : images),
+    [images, mockImages]
+  );
+
   useEffect(() => {
     return () => {
       if (previewUrl?.startsWith('blob:')) {
@@ -208,20 +265,20 @@ export function AdminGalleryList({
   );
 
   const sortedImages = useMemo(
-    () => [...images].sort(compareSort),
-    [images]
+    () => [...allImages].sort(compareSort),
+    [allImages]
   );
 
   const stats = useMemo(() => {
-    const activeImages = images.filter((image) => image.is_active);
+    const activeImages = allImages.filter((image) => image.is_active);
     return {
       categories: categories.length,
-      images: images.length,
+      images: allImages.length,
       active: activeImages.length,
       homepage: activeImages.filter((image) => image.show_on_homepage).length,
-      inactive: images.filter((image) => !image.is_active).length,
+      inactive: allImages.filter((image) => !image.is_active).length,
     };
-  }, [categories, images]);
+  }, [categories, allImages]);
 
   const matchesFilter = (image: GalleryImage) => {
     const needle = query.trim().toLowerCase();
@@ -489,7 +546,40 @@ export function AdminGalleryList({
 
     setIsSaving(true);
     try {
-      if (selectedImage) {
+      if (isMockMode && !selectedImage) {
+        // Demo mode: persist the image in this browser instead of calling the API.
+        const url =
+          uploadMode === 'file' && selectedFile
+            ? await downscaleImageForMockMode(selectedFile)
+            : imageForm.url.trim();
+        if (url.length > MOCK_MAX_DATA_URL_LENGTH) {
+          throw new Error(MOCK_IMAGE_TOO_LARGE_ERROR);
+        }
+        const now = new Date().toISOString();
+        const newImage: GalleryImage = {
+          id: mockId('gal'),
+          url,
+          alt_text: imageForm.altText.trim(),
+          title: imageForm.title.trim() || null,
+          description: imageForm.description.trim() || null,
+          category_id: categoryId,
+          category_name: categoryId
+            ? sortedCategories.find((category) => category.id === categoryId)?.name || null
+            : null,
+          storage_path: null,
+          sort_order: getImagesForCategory(categoryId, false).length + 1,
+          is_active: imageForm.isActive,
+          show_on_homepage: imageForm.showOnHomepage,
+          created_at: now,
+          updated_at: now,
+        };
+        const stored = addToMockCollection(MOCK_STORE_KEYS.galleryImages, newImage);
+        if (!stored.some((item) => item.id === newImage.id)) {
+          throw new Error(MOCK_IMAGE_TOO_LARGE_ERROR);
+        }
+        setMockImages((prev) => [...prev, newImage]);
+        toast.success('Bild hinzugefügt');
+      } else if (selectedImage) {
         await sendGalleryRequest('PUT', {
           resource: 'image',
           id: selectedImage.id,
@@ -611,6 +701,22 @@ export function AdminGalleryList({
   const handleDeleteImageConfirm = async () => {
     if (!selectedImage) return;
 
+    if (isMockMode) {
+      if (selectedImage.id.startsWith('gal-')) {
+        removeFromMockCollection<GalleryImage>(
+          MOCK_STORE_KEYS.galleryImages,
+          (item) => item.id === selectedImage.id
+        );
+        setMockImages((prev) => prev.filter((item) => item.id !== selectedImage.id));
+        toast.success('Bild gelöscht');
+      } else {
+        toast.error('Im Demo-Modus nicht verfügbar');
+      }
+      setDeleteImageDialogOpen(false);
+      setSelectedImage(null);
+      return;
+    }
+
     setIsDeleting(true);
     try {
       await sendGalleryRequest('DELETE', {
@@ -640,7 +746,7 @@ export function AdminGalleryList({
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
           className="object-cover"
-          unoptimized={isLocalImage(image.url)}
+          unoptimized={isLocalImage(image.url) || image.id.startsWith('gal-')}
         />
 
         <div className="absolute left-2 top-2 flex flex-wrap gap-1">
@@ -732,7 +838,7 @@ export function AdminGalleryList({
     const allCategoryImages = getImagesForCategory(categoryId, false);
     const isUncategorized = !category;
 
-    if (isUncategorized && allCategoryImages.length === 0 && images.length > 0) {
+    if (isUncategorized && allCategoryImages.length === 0 && allImages.length > 0) {
       return null;
     }
 
@@ -946,7 +1052,7 @@ export function AdminGalleryList({
         </div>
       </div>
 
-      {categories.length === 0 && images.length === 0 ? (
+      {categories.length === 0 && allImages.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="py-14 text-center">
             <ImageIcon className="mx-auto mb-4 h-12 w-12 text-muted-foreground/40" />

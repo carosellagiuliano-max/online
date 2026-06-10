@@ -82,6 +82,21 @@ const MOCK_GALLERY_IMAGES: GalleryImageRow[] = [
   },
 ];
 
+/**
+ * Mock-mode seed data for server pages (e.g. /admin/galerie).
+ * Exposed as an async function because 'use server' files may
+ * only export async functions.
+ */
+export async function getMockGallerySeed(): Promise<{
+  categories: GalleryCategoryRow[];
+  images: GalleryImageRow[];
+}> {
+  return {
+    categories: MOCK_GALLERY_CATEGORIES,
+    images: MOCK_GALLERY_IMAGES,
+  };
+}
+
 function resolvePublicSalonId(salonId?: string | null): string {
   return salonId || process.env.NEXT_PUBLIC_SALON_ID || DEFAULT_SALON_ID;
 }

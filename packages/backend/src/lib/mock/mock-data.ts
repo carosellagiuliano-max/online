@@ -306,6 +306,26 @@ export const MOCK_PRODUCTS = [
     is_active: true,
     image_url: null,
   },
+  {
+    id: 'prod-004',
+    salon_id: MOCK_SALON.id,
+    name: 'Moroccanoil Treatment Original',
+    description: 'Pflegendes Haaroel fuer Glanz und Geschmeidigkeit',
+    price: 41,
+    stock_quantity: 12,
+    is_active: true,
+    image_url: null,
+  },
+  {
+    id: 'prod-005',
+    salon_id: MOCK_SALON.id,
+    name: 'ghd Platinum+ Styler',
+    description: 'Professionelles Glaetteisen mit Ultra-Zone-Technologie',
+    price: 289,
+    stock_quantity: 4,
+    is_active: true,
+    image_url: null,
+  },
 ];
 
 // ============================================
