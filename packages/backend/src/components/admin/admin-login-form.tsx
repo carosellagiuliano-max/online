@@ -8,7 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { MOCK_ADMIN_USER, MOCK_STAFF_USER } from '@/lib/mock/mock-data';
+import {
+  MOCK_ADMIN_USER,
+  MOCK_STAFF_USER,
+  MOCK_CUSTOMER_USER,
+} from '@/lib/mock/mock-data';
+import { matchMockUser, mockHomePath, setMockSession } from '@/lib/mock/mock-login';
 
 // ============================================
 // MOCK MODE CHECK
@@ -36,24 +41,16 @@ export function AdminLoginForm() {
 
     // ========== MOCK MODE ==========
     if (isMockMode) {
-      // Check mock credentials
-      const isAdmin = email === MOCK_ADMIN_USER.email && password === MOCK_ADMIN_USER.password;
-      const isStaff = email === MOCK_STAFF_USER.email && password === MOCK_STAFF_USER.password;
+      // Accept all demo logins (admin, staff, kunde) and route each to its area
+      const mockUser = matchMockUser(email, password);
 
-      if (isAdmin || isStaff) {
-        // Store mock session in localStorage AND cookies (for server components)
-        const mockUser = isAdmin ? MOCK_ADMIN_USER : MOCK_STAFF_USER;
-        localStorage.setItem('mock_user', JSON.stringify(mockUser));
-        localStorage.setItem('mock_session', 'true');
-
-        // Set cookies for server-side auth check
-        document.cookie = `mock_session=true; path=/; max-age=86400`;
-        document.cookie = `mock_user=${encodeURIComponent(JSON.stringify(mockUser))}; path=/; max-age=86400`;
+      if (mockUser) {
+        setMockSession(mockUser);
 
         // Small delay to simulate network
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        router.push('/admin');
+        router.push(mockHomePath(mockUser));
         router.refresh();
         return;
       } else {
@@ -201,8 +198,9 @@ export function AdminLoginForm() {
                 <div className="text-xs">
                   <p className="font-semibold text-amber-700 dark:text-amber-300 mb-2">Demo-Modus aktiv</p>
                   <div className="space-y-1 text-amber-600 dark:text-amber-400">
-                    <p className="font-mono">Admin: admin@beautifypro.demo / beauty-admin-demo</p>
-                    <p className="font-mono">Staff: staff@beautifypro.demo / beauty-staff-demo</p>
+                    <p className="font-mono">Admin: {MOCK_ADMIN_USER.email} / {MOCK_ADMIN_USER.password}</p>
+                    <p className="font-mono">Staff: {MOCK_STAFF_USER.email} / {MOCK_STAFF_USER.password}</p>
+                    <p className="font-mono">Kunde: {MOCK_CUSTOMER_USER.email} / {MOCK_CUSTOMER_USER.password}</p>
                   </div>
                 </div>
               </div>

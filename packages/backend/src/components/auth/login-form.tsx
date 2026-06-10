@@ -9,7 +9,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { loginCustomer } from '@/lib/actions';
-import { MOCK_CUSTOMER_USER } from '@/lib/mock/mock-data';
+import {
+  MOCK_ADMIN_USER,
+  MOCK_STAFF_USER,
+  MOCK_CUSTOMER_USER,
+} from '@/lib/mock/mock-data';
+import { matchMockUser, mockHomePath, setMockSession } from '@/lib/mock/mock-login';
 
 interface LoginFormProps {
   redirectTo?: string;
@@ -28,16 +33,19 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
 
     try {
       if (isMockMode) {
-        const email = String(formData.get('email') || '').trim().toLowerCase();
+        const email = String(formData.get('email') || '');
         const password = String(formData.get('password') || '');
+        const mockUser = matchMockUser(email, password);
 
-        if (email === MOCK_CUSTOMER_USER.email && password === MOCK_CUSTOMER_USER.password) {
-          localStorage.setItem('mock_user', JSON.stringify(MOCK_CUSTOMER_USER));
-          localStorage.setItem('mock_session', 'true');
-          document.cookie = 'mock_session=true; path=/; max-age=86400';
-          document.cookie = `mock_user=${encodeURIComponent(JSON.stringify(MOCK_CUSTOMER_USER))}; path=/; max-age=86400`;
+        if (mockUser) {
+          setMockSession(mockUser);
           await new Promise((resolve) => setTimeout(resolve, 300));
-          router.push(redirectTo || '/konto');
+          // Kunde respects the redirect target, admin/staff go to the admin area
+          const target =
+            mockUser.role === 'kunde'
+              ? redirectTo || '/konto'
+              : mockHomePath(mockUser);
+          router.push(target);
           router.refresh();
           return;
         }
@@ -131,9 +139,16 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-3 text-xs text-amber-700">
           <div className="mb-1 flex items-center gap-2 font-semibold">
             <Info className="h-4 w-4" />
-            Demo-Kundenlogin
+            Demo-Logins
           </div>
-          <p className="font-mono">kunde@beautifypro.demo / beauty-kunde-demo</p>
+          <div className="space-y-1">
+            <p className="font-mono">Kunde: {MOCK_CUSTOMER_USER.email} / {MOCK_CUSTOMER_USER.password}</p>
+            <p className="font-mono">Admin: {MOCK_ADMIN_USER.email} / {MOCK_ADMIN_USER.password}</p>
+            <p className="font-mono">Staff: {MOCK_STAFF_USER.email} / {MOCK_STAFF_USER.password}</p>
+          </div>
+          <p className="mt-2 text-amber-600">
+            Admin und Staff landen nach dem Login automatisch im Admin-Bereich.
+          </p>
         </div>
       )}
 
